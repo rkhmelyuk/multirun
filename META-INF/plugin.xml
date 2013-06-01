@@ -25,11 +25,9 @@
     -->
 
     <application-components>
-        <!-- Add your application components here -->
     </application-components>
 
     <project-components>
-        <!-- Add your project components here -->
     </project-components>
 
     <actions>
@@ -37,6 +35,7 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
+        <configurationType implementation="com.khmelyuk.multirun.MultirunConfigurationType"/>
+        <programRunner implementation="com.khmelyuk.multirun.MultirunRunner"/>
     </extensions>
 </idea-plugin>
