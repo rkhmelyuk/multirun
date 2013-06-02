@@ -11,6 +11,7 @@ import com.intellij.openapi.util.SystemInfo;
 import com.intellij.ui.*;
 import com.intellij.ui.components.JBList;
 import com.khmelyuk.multirun.MultirunRunConfiguration;
+import com.khmelyuk.multirun.RunConfigurationHelper;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -147,9 +148,16 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
                 // skip already added
                 continue;
             }
+            if (configuration instanceof MultirunRunConfiguration) {
+                // exclude configurations that may cause loopies
+                if (RunConfigurationHelper.containsLoopies((MultirunRunConfiguration) configuration, this.configuration)) {
+                    continue;
+                }
+            }
             result.add(configuration);
         }
 
         return result;
     }
+
 }

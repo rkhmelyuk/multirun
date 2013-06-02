@@ -76,6 +76,16 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
             for (RunConfiguration configuration : allConfigurations) {
                 if (configuration.getName().equals(eachElement.getAttributeValue("name")) &&
                         configuration.getType().getDisplayName().equals(eachElement.getAttributeValue("type"))) {
+                    if (configuration instanceof MultirunRunConfiguration) {
+                        if (configuration.equals(this)) {
+                            // exclude itself
+                            break;
+                        }
+                        if (RunConfigurationHelper.containsLoopies((MultirunRunConfiguration) configuration, this)) {
+                            // disallow adding multirun configuration that causes looping
+                            break;
+                        }
+                    }
                     runConfigurations.add(configuration);
                     break;
                 }
