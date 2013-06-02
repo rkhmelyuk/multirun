@@ -1,6 +1,8 @@
 package com.khmelyuk.multirun;
 
-import com.intellij.execution.*;
+import com.intellij.execution.ExecutionException;
+import com.intellij.execution.Executor;
+import com.intellij.execution.RunManager;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
@@ -61,12 +63,25 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
         super.readExternal(element);
         startOneByOne = Boolean.parseBoolean(element.getAttributeValue("startOneByOne"));
         separateTabs = Boolean.parseBoolean(element.getAttributeValue("separateTabs"));
-        /*List<Element> collection = element.getContent();
-        for(Element each : collection) {
-            if (each.getName().equals("runConfiguration")) {
-                System.out.println(each.getAttribute("uniqueID"));
+
+        RunConfiguration[] allConfigurations = RunManager.getInstance(getProject()).getAllConfigurations();
+        for (Object each : element.getContent()) {
+            if (!(each instanceof Element)) {
+                continue;
             }
-        }*/
+            Element eachElement = (Element) each;
+            if (!eachElement.getName().equals("runConfiguration")) {
+                continue;
+            }
+            for (RunConfiguration configuration : allConfigurations) {
+                if (configuration.getName().equals(eachElement.getAttributeValue("name")) &&
+                        configuration.getType().getDisplayName().equals(eachElement.getAttributeValue("type"))) {
+                    runConfigurations.add(configuration);
+                    break;
+                }
+            }
+
+        }
     }
 
     @Override
@@ -74,13 +89,14 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
         super.writeExternal(element);
         element.setAttribute("startOneByOne", String.valueOf(startOneByOne));
         element.setAttribute("separateTabs", String.valueOf(separateTabs));
-        /*List<Element> configurations = new ArrayList<Element>();
-        for(RunConfiguration each : runConfigurations) {
+        List<Element> configurations = new ArrayList<Element>();
+        for (RunConfiguration each : runConfigurations) {
             Element runConfiguration = new Element("runConfiguration");
-            element.setAttribute("uniqueID", String.valueOf(each.getUniqueID()));
+            runConfiguration.setAttribute("name", each.getName());
+            runConfiguration.setAttribute("type", each.getType().getDisplayName());
             configurations.add(runConfiguration);
         }
-        element.setContent(configurations);*/
+        element.setContent(configurations);
     }
 
     @Nullable
