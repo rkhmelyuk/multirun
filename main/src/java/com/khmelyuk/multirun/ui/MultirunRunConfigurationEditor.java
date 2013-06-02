@@ -139,7 +139,7 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
         java.util.List<RunConfiguration> result = new ArrayList<RunConfiguration>();
         RunConfiguration[] allConfigurations = RunManager.getInstance(project).getAllConfigurations();
         for (RunConfiguration configuration : allConfigurations) {
-            if (configuration.getUniqueID() == this.configuration.getUniqueID()) {
+            if (this.configuration.equals(configuration)) {
                 // skip current
                 continue;
             }
