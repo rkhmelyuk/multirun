@@ -90,10 +90,14 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
         configurations.setModel(listModel);
         configurations.getModel().addListDataListener(new ListDataListener() {
             @Override
-            public void intervalAdded(ListDataEvent e) { contentsChanged(e); }
+            public void intervalAdded(ListDataEvent e) {
+                contentsChanged(e);
+            }
 
             @Override
-            public void intervalRemoved(ListDataEvent e) { contentsChanged(e); }
+            public void intervalRemoved(ListDataEvent e) {
+                contentsChanged(e);
+            }
 
             @Override
             public void contentsChanged(ListDataEvent e) {
@@ -121,10 +125,13 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
 
     @NotNull
     @Override
-    protected JComponent createEditor() { return myMainPanel; }
+    protected JComponent createEditor() {
+        return myMainPanel;
+    }
 
     @Override
-    protected void disposeEditor() { }
+    protected void disposeEditor() {
+    }
 
     private static class RunConfigurationListCellRenderer extends ListCellRendererWrapper<RunConfiguration> {
         @Override

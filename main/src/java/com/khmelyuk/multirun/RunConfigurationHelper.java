@@ -8,7 +8,7 @@ public class RunConfigurationHelper {
         if (configuration.equals(target)) {
             return true;
         }
-        for(RunConfiguration each : configuration.getRunConfigurations()) {
+        for (RunConfiguration each : configuration.getRunConfigurations()) {
             if (each.equals(target)) {
                 return true;
             }

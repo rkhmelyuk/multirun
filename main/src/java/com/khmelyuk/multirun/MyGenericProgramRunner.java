@@ -13,10 +13,10 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Method;
 
 /**
-* TODO: javadoc
-*
-* @author Ruslan Khmelyuk
-*/
+ * This program runner is a through-the-ass way to star each configuration in separate tab.
+ *
+ * @author Ruslan Khmelyuk
+ */
 public class MyGenericProgramRunner extends GenericProgramRunner {
 
     private GenericProgramRunner runner;
@@ -40,7 +40,6 @@ public class MyGenericProgramRunner extends GenericProgramRunner {
     protected RunContentDescriptor doExecute(Project project, Executor executor, RunProfileState state,
                                              RunContentDescriptor contentToReuse, ExecutionEnvironment env) throws ExecutionException {
         try {
-            // TODO - wtf? - find the better way!!!
             Method doExecute = runner.getClass().getDeclaredMethod("doExecute", Project.class, Executor.class, RunProfileState.class,
                                                                    RunContentDescriptor.class, ExecutionEnvironment.class);
             doExecute.setAccessible(true);
