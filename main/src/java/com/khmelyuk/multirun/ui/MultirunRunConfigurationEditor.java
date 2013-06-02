@@ -1,48 +1,155 @@
 package com.khmelyuk.multirun.ui;
 
+import com.intellij.execution.RunManager;
+import com.intellij.execution.configurations.RunConfiguration;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.util.SystemInfo;
+import com.intellij.ui.*;
+import com.intellij.ui.components.JBList;
 import com.khmelyuk.multirun.MultirunRunConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
- * TODO - javadoc me
+ * For to edit multirun run configuration.
  *
  * @author Ruslan Khmelyuk
  */
+@SuppressWarnings("unchecked")
 public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunConfiguration> {
+    private Project project;
     private JPanel myMainPanel;
-    private JList configurations;
-    private JButton addConfiguration;
-    private JButton removeConfiguration;
+    private JBList configurations;
+    private JCheckBox startOneByOne;
+    private JCheckBox reuseTabs;
+    private JPanel collectionsPanel;
+    private MultirunRunConfiguration configuration;
 
-    public MultirunRunConfigurationEditor(Project project) {
+    public MultirunRunConfigurationEditor(final Project project) {
+        this.project = project;
+
+        configurations.getEmptyText().setText("Add run configurations to this list");
+        final ToolbarDecorator myDecorator = ToolbarDecorator.createDecorator(configurations);
+        if (!SystemInfo.isMac) {
+            myDecorator.setAsUsualTopToolbar();
+        }
+        myDecorator.setAddAction(new AnActionButtonRunnable() {
+            @Override
+            public void run(AnActionButton button) {
+                final JBList list = new JBList(getConfigurationsToAdd());
+                list.setCellRenderer(new RunConfigurationListCellRenderer());
+                JBPopupFactory.getInstance().createListPopupBuilder(list)
+                        .setItemChoosenCallback(new Runnable() {
+                            @Override
+                            public void run() {
+                                int[] selectedIndices = list.getSelectedIndices();
+                                for (int index : selectedIndices) {
+                                    RunConfiguration selectedRunConfiguration = (RunConfiguration) list.getModel().getElementAt(index);
+                                    if (selectedRunConfiguration != null) {
+                                        ((DefaultListModel) configurations.getModel()).addElement(selectedRunConfiguration);
+                                    }
+                                }
+                            }
+                        })
+                        .createPopup()
+                        .showUnderneathOf(button.getContextComponent());
+            }
+        });
+        myDecorator.setAddActionUpdater(new AnActionButtonUpdater() {
+            @Override
+            public boolean isEnabled(AnActionEvent e) {
+                return !getConfigurationsToAdd().isEmpty();
+            }
+        });
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        JPanel myDecoratorPanel = myDecorator.createPanel();
+        panel.add(myDecoratorPanel, BorderLayout.CENTER);
+        collectionsPanel.add(myDecoratorPanel);
     }
 
     @Override
     protected void resetEditorFrom(MultirunRunConfiguration multirunRunConfiguration) {
+        this.configuration = multirunRunConfiguration;
+        DefaultListModel listModel = new DefaultListModel();
+        for (RunConfiguration each : multirunRunConfiguration.getRunConfigurations()) {
+            listModel.addElement(each);
+        }
+        configurations.setModel(listModel);
+        configurations.getModel().addListDataListener(new ListDataListener() {
+            @Override
+            public void intervalAdded(ListDataEvent e) { contentsChanged(e); }
 
+            @Override
+            public void intervalRemoved(ListDataEvent e) { contentsChanged(e); }
+
+            @Override
+            public void contentsChanged(ListDataEvent e) {
+                RunConfiguration[] buffer = new RunConfiguration[configurations.getModel().getSize()];
+                ((DefaultListModel) configurations.getModel()).copyInto(buffer);
+                configuration.setRunConfigurations(Arrays.asList(buffer));
+                fireEditorStateChanged();
+            }
+        });
+        configurations.setCellRenderer(new RunConfigurationListCellRenderer());
+
+        reuseTabs.setSelected(!multirunRunConfiguration.isSeparateTabs());
+        startOneByOne.setSelected(multirunRunConfiguration.isStartOneByOne());
     }
 
     @Override
     protected void applyEditorTo(MultirunRunConfiguration multirunRunConfiguration) throws ConfigurationException {
+        multirunRunConfiguration.setSeparateTabs(!reuseTabs.isSelected());
+        multirunRunConfiguration.setStartOneByOne(startOneByOne.isSelected());
 
+        RunConfiguration[] buffer = new RunConfiguration[configurations.getModel().getSize()];
+        ((DefaultListModel) configurations.getModel()).copyInto(buffer);
+        MultirunRunConfigurationEditor.this.configuration.setRunConfigurations(Arrays.asList(buffer));
     }
 
     @NotNull
     @Override
-    protected JComponent createEditor() {
-        return myMainPanel;
-    }
+    protected JComponent createEditor() { return myMainPanel; }
 
     @Override
-    protected void disposeEditor() {
+    protected void disposeEditor() { }
+
+    private static class RunConfigurationListCellRenderer extends ListCellRendererWrapper<RunConfiguration> {
+        @Override
+        public void customize(JList list, RunConfiguration data, int index, boolean selected, boolean hasFocus) {
+            if (data != null) {
+                setIcon(data.getIcon());
+                setText("Run '" + data.getName() + "'");
+            }
+        }
     }
 
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
+    private java.util.List<RunConfiguration> getConfigurationsToAdd() {
+        java.util.List<RunConfiguration> result = new ArrayList<RunConfiguration>();
+        RunConfiguration[] allConfigurations = RunManager.getInstance(project).getAllConfigurations();
+        for (RunConfiguration configuration : allConfigurations) {
+            if (configuration.getUniqueID() == this.configuration.getUniqueID()) {
+                // skip current
+                continue;
+            }
+            if (this.configuration.getRunConfigurations().contains(configuration)) {
+                // skip already added
+                continue;
+            }
+            result.add(configuration);
+        }
+
+        return result;
     }
 }

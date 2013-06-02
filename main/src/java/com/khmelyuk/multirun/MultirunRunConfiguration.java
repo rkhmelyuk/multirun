@@ -1,39 +1,86 @@
 package com.khmelyuk.multirun;
 
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.Executor;
-import com.intellij.execution.RunConfigurationExtension;
+import com.intellij.execution.*;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizable;
+import com.intellij.openapi.util.WriteExternalException;
 import com.khmelyuk.multirun.ui.MultirunRunConfigurationEditor;
+import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * TODO - javadoc me
- *
- * @author Ruslan Khmelyuk
- */
 public class MultirunRunConfiguration extends RunConfigurationBase {
 
+    private boolean separateTabs = false;
+    private boolean startOneByOne = true;
     private List<RunConfiguration> runConfigurations = new ArrayList<RunConfiguration>();
 
     public MultirunRunConfiguration(Project project, ConfigurationFactory factory, String name) {
         super(project, factory, name);
+    }
 
-        System.out.println("run configuration " + project.getComponent(RunConfigurationExtension.class));
+    public List<RunConfiguration> getRunConfigurations() {
+        return runConfigurations;
+    }
+
+    public void setRunConfigurations(List<RunConfiguration> runConfigurations) {
+        this.runConfigurations = runConfigurations;
+    }
+
+    public boolean isSeparateTabs() {
+        return separateTabs;
+    }
+
+    public void setSeparateTabs(boolean separateTabs) {
+        this.separateTabs = separateTabs;
+    }
+
+    public boolean isStartOneByOne() {
+        return startOneByOne;
+    }
+
+    public void setStartOneByOne(boolean startOneByOne) {
+        this.startOneByOne = startOneByOne;
     }
 
     @Override
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
         return new MultirunRunConfigurationEditor(getProject());
+    }
+
+    @Override
+    public void readExternal(Element element) throws InvalidDataException {
+        super.readExternal(element);
+        startOneByOne = Boolean.parseBoolean(element.getAttributeValue("startOneByOne"));
+        separateTabs = Boolean.parseBoolean(element.getAttributeValue("separateTabs"));
+        /*List<Element> collection = element.getContent();
+        for(Element each : collection) {
+            if (each.getName().equals("runConfiguration")) {
+                System.out.println(each.getAttribute("uniqueID"));
+            }
+        }*/
+    }
+
+    @Override
+    public void writeExternal(Element element) throws WriteExternalException {
+        super.writeExternal(element);
+        element.setAttribute("startOneByOne", String.valueOf(startOneByOne));
+        element.setAttribute("separateTabs", String.valueOf(separateTabs));
+        /*List<Element> configurations = new ArrayList<Element>();
+        for(RunConfiguration each : runConfigurations) {
+            Element runConfiguration = new Element("runConfiguration");
+            element.setAttribute("uniqueID", String.valueOf(each.getUniqueID()));
+            configurations.add(runConfiguration);
+        }
+        element.setContent(configurations);*/
     }
 
     @Nullable
@@ -51,7 +98,7 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
     @Nullable
     @Override
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment executionEnvironment) throws ExecutionException {
-        return new MultirunRunnerState();
+        return new MultirunRunnerState(runConfigurations, startOneByOne, separateTabs);
     }
 
     @Override
