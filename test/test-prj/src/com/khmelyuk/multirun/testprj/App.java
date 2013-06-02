@@ -1,8 +1,8 @@
 package com.khmelyuk.multirun.testprj;
 
-public class AppOne {
+public class App {
 
     public static void main(String[] args) {
-        System.out.println("Hello from app1");
+        System.out.println("Hello from " + args[0]);
     }
 }
