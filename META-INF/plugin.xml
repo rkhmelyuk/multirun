@@ -2,9 +2,9 @@
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
     <version>0.1</version>
-    <vendor email="ruslan@khmelyuk.com" url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
+    <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
-    <description><![CDATA[Allows to run multiple run configurations at once]]></description>
+    <description><![CDATA[Allows to run multiple run configurations at once. This allows to group multiple run configurations and start them at once.]]></description>
 
     <change-notes><![CDATA[]]>
     </change-notes>
