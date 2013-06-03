@@ -61,8 +61,12 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
     @Override
     public void readExternal(Element element) throws InvalidDataException {
         super.readExternal(element);
-        startOneByOne = Boolean.parseBoolean(element.getAttributeValue("startOneByOne"));
-        separateTabs = Boolean.parseBoolean(element.getAttributeValue("separateTabs"));
+        if (element.getAttribute("startOneByOne") != null) {
+            startOneByOne = Boolean.parseBoolean(element.getAttributeValue("startOneByOne"));
+        }
+        if (element.getAttribute("separateTabs") != null) {
+            separateTabs = Boolean.parseBoolean(element.getAttributeValue("separateTabs"));
+        }
 
         RunConfiguration[] allConfigurations = RunManager.getInstance(getProject()).getAllConfigurations();
         for (Object each : element.getContent()) {

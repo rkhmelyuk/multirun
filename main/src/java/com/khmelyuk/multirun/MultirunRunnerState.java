@@ -18,11 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-/**
- * TODO - javadoc me
- *
- * @author Ruslan Khmelyuk
- */
+/** @author Ruslan Khmelyuk */
 public class MultirunRunnerState implements RunnableState {
 
     private boolean separateTabs;
@@ -71,13 +67,13 @@ public class MultirunRunnerState implements RunnableState {
                     // mark it as re-usable as it exists already
                     ((MyRunContentDescriptor) runContentDescriptor).reusable = true;
                 }
-                if (runContentDescriptor != null && runner instanceof GenericProgramRunner) {
+                if (runContentDescriptor == null && runner instanceof GenericProgramRunner) {
                     // use custom runner that will start each configuration in separate task
                     runner = new MyGenericProgramRunner((GenericProgramRunner) runner);
                 }
             }
 
-            //TODO - auto pin?
+            // TODO - auto pin?
 
             ExecutionEnvironment executionEnvironment = new ExecutionEnvironmentBuilder()
                     .setRunnerAndSettings(runner, configuration)
@@ -87,7 +83,7 @@ public class MultirunRunnerState implements RunnableState {
 
             runner.execute(executor, executionEnvironment, new ProgramRunner.Callback() {
                 @Override
-                public void processStarted(RunContentDescriptor descriptor) {
+                public void processStarted(final RunContentDescriptor descriptor) {
                     if (startOneByOne) {
                         runConfigurations(executor, runConfigurations, index + 1);
                     }
