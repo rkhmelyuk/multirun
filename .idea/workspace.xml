@@ -4,25 +4,35 @@
     <bookmark url="file://$PROJECT_DIR$/../intellij-community/platform/lang-impl/src/com/intellij/execution/ui/RunContentManagerImpl.java" line="398" mnemonic="2" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="132e5848-238d-4a0d-85d7-8327113301bd" name="Default" comment="Initial work on plugin.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MyGenericProgramRunner.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MyRunContentDescriptor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunConfigurationType.java" afterPath="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunConfigurationType.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunRunConfiguration.java" afterPath="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunRunConfiguration.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/ui/MultirunRunConfigurationEditor.form" afterPath="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/ui/MultirunRunConfigurationEditor.form" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/ui/MultirunRunConfigurationEditor.java" afterPath="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/ui/MultirunRunConfigurationEditor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunRunner.java" afterPath="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunRunner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunRunnerState.java" afterPath="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunRunnerState.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/META-INF/plugin.xml" afterPath="$PROJECT_DIR$/META-INF/plugin.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    <list default="true" id="132e5848-238d-4a0d-85d7-8327113301bd" name="Default" comment="Remove .idea and test project from">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/dictionaries/ruslan.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/test-prj/.idea/.name" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/test-prj/.idea/compiler.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/test-prj/.idea/copyright/profiles_settings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/test-prj/.idea/encodings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/test-prj/.idea/misc.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/test-prj/.idea/modules.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/test-prj/.idea/scopes/scope_settings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/test-prj/.idea/uiDesigner.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/test-prj/.idea/vcs.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/test-prj/.idea/workspace.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/test-prj/src/com/khmelyuk/multirun/testprj/App.java" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
     </list>
     <ignored path="multirun.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/plugin.xml" changelist="132e5848-238d-4a0d-85d7-8327113301bd" time="1370125110617" ignored="false" />
-    <file path="/Dummy.txt" changelist="132e5848-238d-4a0d-85d7-8327113301bd" time="1370210014416" ignored="false" />
+    <file path="/plugin.xml" changelist="132e5848-238d-4a0d-85d7-8327113301bd" time="1370210074892" ignored="false" />
+    <file path="/Dummy.txt" changelist="132e5848-238d-4a0d-85d7-8327113301bd" time="1370223778466" ignored="false" />
     <file path="/MultirunRunnerComponent.java" changelist="132e5848-238d-4a0d-85d7-8327113301bd" time="1370119689004" ignored="false" />
     <file path="/MultirunProjectSettingsComponent.java" changelist="132e5848-238d-4a0d-85d7-8327113301bd" time="1370119632946" ignored="false" />
     <file path="/MultirunConfigurationType.java" changelist="132e5848-238d-4a0d-85d7-8327113301bd" time="1370158814098" ignored="false" />
@@ -33,8 +43,9 @@
     <file path="/MultirunRunnerState.java" changelist="132e5848-238d-4a0d-85d7-8327113301bd" time="1370158949218" ignored="false" />
     <file path="/MyGenericProgramRunner.java" changelist="132e5848-238d-4a0d-85d7-8327113301bd" time="1370146210768" ignored="false" />
     <file path="/MyRunContentDescriptor.java" changelist="132e5848-238d-4a0d-85d7-8327113301bd" time="1370146898581" ignored="false" />
-    <file path="/a.java" changelist="132e5848-238d-4a0d-85d7-8327113301bd" time="1370208883298" ignored="false" />
+    <file path="/a.java" changelist="132e5848-238d-4a0d-85d7-8327113301bd" time="1370221933832" ignored="false" />
     <file path="/sample.java" changelist="132e5848-238d-4a0d-85d7-8327113301bd" time="1370208893596" ignored="false" />
+    <file path="/.gitignore" changelist="132e5848-238d-4a0d-85d7-8327113301bd" time="1370223781321" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +60,23 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
+    <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true">
+      <breakpoint url="file://$PROJECT_DIR$/../intellij-community/platform/platform-api/src/com/intellij/ui/ComponentTreeWatcher.java" line="65" class="com.intellij.ui.ComponentTreeWatcher" package="com.intellij.ui">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+    </line_breakpoints>
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -86,23 +114,6 @@
       </breakpoint>
     </breakpoint_any>
     <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
-    <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/../intellij-community/platform/platform-api/src/com/intellij/ui/ComponentTreeWatcher.java" line="65" class="com.intellij.ui.ComponentTreeWatcher" package="com.intellij.ui">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="REMOVE_AFTER_HIT" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-    </line_breakpoints>
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -112,35 +123,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MultirunRunConfigurationEditor.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/ui/MultirunRunConfigurationEditor.java">
+      <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="72" column="59" selection-start="3134" selection-end="3134" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#1663#2898#0" expanded="true" />
-                <element signature="e#2043#2761#0" expanded="true" />
-                <element signature="e#2734#2735#0" expanded="true" />
-                <element signature="e#2887#2888#0" expanded="true" />
-                <element signature="e#2941#3132#0" expanded="true" />
-                <element signature="e#3121#3122#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MultirunRunnerState.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunRunnerState.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="148" column="48" selection-start="6648" selection-end="6648" vertical-scroll-proportion="1.1806854">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MultirunRunConfiguration.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunRunConfiguration.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="52" column="24" selection-start="1707" selection-end="1707" vertical-scroll-proportion="0.0">
+            <state line="2" column="5" selection-start="25" selection-end="25" vertical-scroll-proportion="0.049382716">
               <folding />
             </state>
           </provider>
@@ -164,10 +150,7 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunProjectSettingsComponent.java" />
-        <option value="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunRunnerComponent.java" />
         <option value="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunRunConfigurationEditor.java" />
-        <option value="$PROJECT_DIR$/META-INF/plugin.xml" />
         <option value="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunRunningState.java" />
         <option value="$PROJECT_DIR$/TODO" />
         <option value="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MyGenericProgramRunner.java" />
@@ -180,6 +163,9 @@
         <option value="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/ui/MultirunRunConfigurationEditor.java" />
         <option value="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunRunConfiguration.java" />
         <option value="$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/ui/MultirunRunConfigurationEditor.form" />
+        <option value="$PROJECT_DIR$/META-INF/plugin.xml" />
+        <option value="$PROJECT_DIR$/license.txt" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -191,10 +177,10 @@
     <option name="CUSTOM_FILTER" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="40" />
-    <option name="y" value="48" />
-    <option name="width" value="1824" />
-    <option name="height" value="1068" />
+    <option name="x" value="33" />
+    <option name="y" value="46" />
+    <option name="width" value="1846" />
+    <option name="height" value="1076" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -265,17 +251,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="multirun" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -308,68 +283,37 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test-prj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="multirun" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="multirun" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="META-INF" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane">
+        <subPane>
           <PATH>
             <PATH_ELEMENT>
               <option name="myItemId" value="multirun" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="multirun" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="multirun" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="multirun" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="multirun" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="multirun" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ui" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MultirunRunConfigurationEditor" />
-              <option name="myItemType" value="com.intellij.uiDesigner.projectView.FormNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -378,23 +322,39 @@
   </component>
   <component name="PropertiesComponent">
     <property name="project.structure.last.edited" value="SDKs" />
-    <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="project.structure.proportion" value="0.0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="247" />
     <property name="OverrideImplement.combined" value="true" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="249" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="MemberChooser.sorted" value="false" />
-    <property name="options.lastSelected" value="preferences.sourceCode.Java" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="247" />
     <property name="recentsLimit" value="5" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../intellij-community" />
-    <property name="project.structure.side.proportion" value="0.2" />
-    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="252" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="1046" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="1046" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="252" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="249" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="restartRequiresConfirmation" value="true" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder3" value="3" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="dynamic.classpath" value="false" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
+    <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
+    <property name="options.lastSelected" value="preferences.pluginManager" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="restartRequiresConfirmation" value="true" />
+    <property name="dynamic.classpath" value="false" />
     <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
@@ -404,7 +364,7 @@
   </component>
   <component name="RunManager" selected="Plugin.multirun">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
-      <module name="multirun" />
+      <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
       <option name="PROGRAM_PARAMETERS" />
       <method />
@@ -415,6 +375,9 @@
       <option name="SHMEM_ADDRESS" value="javadebug" />
       <option name="HOST" value="localhost" />
       <option name="PORT" value="5005" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Multirun" factoryName="Multirun" startOneByOne="true" separateTabs="false">
       <method />
     </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
@@ -484,6 +447,16 @@
     <list size="1">
       <item index="0" class="java.lang.String" itemvalue="Plugin.multirun" />
     </list>
+    <configuration name="&lt;template&gt;" type="TestNG" default="true" selected="false">
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    </configuration>
+    <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
+      <Host>localhost</Host>
+      <Port>5050</Port>
+    </configuration>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
       <Port>5050</Port>
@@ -509,15 +482,34 @@
       <created>1370210018261</created>
       <updated>1370210018261</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="project settings changed.">
+      <created>1370210039999</created>
+      <updated>1370210039999</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Update README">
+      <created>1370210052454</created>
+      <updated>1370210052454</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Update plugin description">
+      <created>1370210098480</created>
+      <updated>1370210098480</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Work on plugin.">
+      <created>1370210115796</created>
+      <updated>1370210115796</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Added license.">
+      <created>1370223714080</created>
+      <updated>1370223714080</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="40" y="48" width="1824" height="1068" extended-state="0" />
+    <frame x="33" y="46" width="1846" height="1076" extended-state="0" />
     <editor active="false" />
     <layout>
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21600877" sideWeight="0.6746747" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32932934" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3286991" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.1946272" sideWeight="0.6746747" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -525,14 +517,15 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35635635" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.325" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32932934" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32832834" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20175439" sideWeight="0.6706707" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20151679" sideWeight="0.6713009" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32532534" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21600877" sideWeight="0.6746747" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298731" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -583,7 +576,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Small cleanup for the test project." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added license." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -599,6 +592,11 @@
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
     <MESSAGE value="Initial work on plugin." />
     <MESSAGE value="Small cleanup for the test project." />
+    <MESSAGE value="project settings changed." />
+    <MESSAGE value="Update README" />
+    <MESSAGE value="Update plugin description" />
+    <MESSAGE value="Work on plugin." />
+    <MESSAGE value="Added license." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -608,42 +606,14 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home/src.zip!/javax/swing/JPanel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="13" selection-start="1490" selection-end="1490" vertical-scroll-proportion="0.33281735">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home/src.zip!/java/awt/Container.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="90" column="13" selection-start="2107" selection-end="2107" vertical-scroll-proportion="0.33281735">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../intellij-community/platform/platform-api/src/com/intellij/openapi/options/SettingsEditor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="113" column="34" selection-start="3308" selection-end="3308" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#3392#3519#0" expanded="true" />
-            <element signature="e#3512#3513#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../intellij-community/platform/util/src/com/intellij/util/ArrayUtil.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="113" selection-start="972" selection-end="972" vertical-scroll-proportion="-0.013931888">
-          <folding />
-        </state>
+        <state line="27" column="113" selection-start="972" selection-end="972" vertical-scroll-proportion="-0.013931888" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../intellij-community/platform/platform-api/src/com/intellij/ui/UserActivityWatcher.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="137" column="28" selection-start="4188" selection-end="4188" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="137" column="28" selection-start="4188" selection-end="4188" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../intellij-community/platform/platform-api/src/com/intellij/ui/ComponentTreeWatcher.java">
@@ -655,58 +625,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../intellij-community/platform/platform-api/src/com/intellij/openapi/actionSystem/DataProvider.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="17" selection-start="1358" selection-end="1358" vertical-scroll-proportion="0.5577236">
-          <folding />
-        </state>
+        <state line="30" column="17" selection-start="1358" selection-end="1358" vertical-scroll-proportion="0.5577236" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../intellij-community/platform/platform-api/src/com/intellij/ui/ListToolbarDecorator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="82" column="17" selection-start="2447" selection-end="2447" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="82" column="17" selection-start="2447" selection-end="2447" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home/src.zip!/java/util/AbstractList.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="147" column="0" selection-start="4992" selection-end="4992" vertical-scroll-proportion="0.33226323">
-          <folding />
-        </state>
+        <state line="147" column="0" selection-start="4992" selection-end="4992" vertical-scroll-proportion="0.33226323" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../intellij-community/platform/platform-api/src/com/intellij/ui/ToolbarDecorator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="354" column="99" selection-start="11865" selection-end="11865" vertical-scroll-proportion="6.6857586">
-          <folding />
-        </state>
+        <state line="354" column="99" selection-start="11865" selection-end="11865" vertical-scroll-proportion="6.6857586" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../intellij-community/platform/platform-api/src/com/intellij/ui/CommonActionsPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="285" column="13" selection-start="10462" selection-end="10462" vertical-scroll-proportion="1.2229102">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/ui/MultirunRunConfigurationEditor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="72" column="59" selection-start="3134" selection-end="3134" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#1663#2898#0" expanded="true" />
-            <element signature="e#2043#2761#0" expanded="true" />
-            <element signature="e#2734#2735#0" expanded="true" />
-            <element signature="e#2887#2888#0" expanded="true" />
-            <element signature="e#2941#3132#0" expanded="true" />
-            <element signature="e#3121#3122#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="285" column="13" selection-start="10462" selection-end="10462" vertical-scroll-proportion="1.2229102" />
       </provider>
     </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/lib/jdom.jar!/org/jdom/Element.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="14" selection-start="658" selection-end="658" vertical-scroll-proportion="0.33281735">
-          <folding />
-        </state>
+        <state line="15" column="14" selection-start="658" selection-end="658" vertical-scroll-proportion="0.33281735" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/ui/MultirunRunConfigurationEditor.form">
@@ -714,16 +658,44 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunRunConfiguration.java">
+    <entry file="file://$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunRunnerState.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="24" selection-start="1707" selection-end="1707" vertical-scroll-proportion="0.0">
+        <state line="144" column="48" selection-start="6627" selection-end="6627" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunRunnerState.java">
+    <entry file="file://$PROJECT_DIR$/META-INF/plugin.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="148" column="48" selection-start="6648" selection-end="6648" vertical-scroll-proportion="1.1806854">
+        <state line="8" column="69" selection-start="380" selection-end="380" vertical-scroll-proportion="0.19937694">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/MultirunRunConfiguration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="84" column="62" selection-start="3291" selection-end="3291" vertical-scroll-proportion="0.5108136">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main/src/java/com/khmelyuk/multirun/ui/MultirunRunConfigurationEditor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="73" column="59" selection-start="3187" selection-end="3187" vertical-scroll-proportion="0.016477859">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/license.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="201" column="33" selection-start="11357" selection-end="11357" vertical-scroll-proportion="0.9673136">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="5" selection-start="25" selection-end="25" vertical-scroll-proportion="0.049382716">
           <folding />
         </state>
       </provider>

@@ -1,4 +1,6 @@
-#.idea
+.idea
+test/test-prj
+*.jar
 *.iml
 *.ipr
 *.iws
