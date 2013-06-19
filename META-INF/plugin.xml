@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>0.1</version>
+    <version>0.2</version>
     <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
     <description><![CDATA[Allows to run multiple run configurations at once. This allows to group multiple run configurations and start them at once.]]></description>
