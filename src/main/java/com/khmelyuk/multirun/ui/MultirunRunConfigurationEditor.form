@@ -52,9 +52,17 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="b2335" class="com.intellij.ui.components.JBList" binding="configurations">
-                <constraints border-constraint="Center"/>
-                <properties/>
+              <component id="a3e3d" class="javax.swing.JCheckBox" binding="configurationsListChanged">
+                <constraints border-constraint="South"/>
+                <properties>
+                  <enabled value="true"/>
+                  <hideActionText value="true"/>
+                  <text value=""/>
+                </properties>
+                <clientProperties>
+                  <hideActionText class="java.lang.Boolean" value="true"/>
+                  <html.disable class="java.lang.Boolean" value="false"/>
+                </clientProperties>
               </component>
             </children>
           </grid>

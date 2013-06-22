@@ -34,50 +34,11 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
     private JCheckBox startOneByOne;
     private JCheckBox reuseTabs;
     private JPanel collectionsPanel;
+    private JCheckBox configurationsListChanged;
     private MultirunRunConfiguration configuration;
 
     public MultirunRunConfigurationEditor(final Project project) {
         this.project = project;
-
-        configurations.getEmptyText().setText("Add run configurations to this list");
-        final ToolbarDecorator myDecorator = ToolbarDecorator.createDecorator(configurations);
-        if (!SystemInfo.isMac) {
-            myDecorator.setAsUsualTopToolbar();
-        }
-        myDecorator.setAddAction(new AnActionButtonRunnable() {
-            @Override
-            public void run(AnActionButton button) {
-                final JBList list = new JBList(getConfigurationsToAdd());
-                list.setCellRenderer(new RunConfigurationListCellRenderer());
-                JBPopupFactory.getInstance().createListPopupBuilder(list)
-                        .setItemChoosenCallback(new Runnable() {
-                            @Override
-                            public void run() {
-                                int[] selectedIndices = list.getSelectedIndices();
-                                for (int index : selectedIndices) {
-                                    RunConfiguration selectedRunConfiguration = (RunConfiguration) list.getModel().getElementAt(index);
-                                    if (selectedRunConfiguration != null) {
-                                        ((DefaultListModel) configurations.getModel()).addElement(selectedRunConfiguration);
-                                    }
-                                }
-                            }
-                        })
-                        .createPopup()
-                        .showUnderneathOf(button.getContextComponent());
-            }
-        });
-        myDecorator.setAddActionUpdater(new AnActionButtonUpdater() {
-            @Override
-            public boolean isEnabled(AnActionEvent e) {
-                return !getConfigurationsToAdd().isEmpty();
-            }
-        });
-
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        JPanel myDecoratorPanel = myDecorator.createPanel();
-        panel.add(myDecoratorPanel, BorderLayout.CENTER);
-        collectionsPanel.add(myDecoratorPanel);
     }
 
     @Override
@@ -126,7 +87,64 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
     @NotNull
     @Override
     protected JComponent createEditor() {
+        configurations = new JBList();
+        configurations.getEmptyText().setText("Add run configurations to this list");
+        final ToolbarDecorator myDecorator = ToolbarDecorator.createDecorator(configurations);
+        if (!SystemInfo.isMac) {
+            myDecorator.setAsUsualTopToolbar();
+        }
+        myDecorator.setRemoveAction(new AnActionButtonRunnable() {
+            @Override
+            public void run(AnActionButton anActionButton) {
+                ListUtil.removeSelectedItems(configurations);
+                markConfigurationsChanged();
+            }
+        });
+        myDecorator.setAddAction(new AnActionButtonRunnable() {
+            @Override
+            public void run(AnActionButton button) {
+                final JBList list = new JBList(getConfigurationsToAdd());
+                list.setCellRenderer(new RunConfigurationListCellRenderer());
+                JBPopupFactory.getInstance().createListPopupBuilder(list)
+                        .setItemChoosenCallback(new Runnable() {
+                            @Override
+                            public void run() {
+                                int[] selectedIndices = list.getSelectedIndices();
+                                for (int index : selectedIndices) {
+                                    RunConfiguration selectedRunConfiguration = (RunConfiguration) list.getModel().getElementAt(index);
+                                    if (selectedRunConfiguration != null) {
+                                        ((DefaultListModel) configurations.getModel()).addElement(selectedRunConfiguration);
+                                    }
+
+                                    markConfigurationsChanged();
+                                }
+                            }
+                        })
+                        .createPopup()
+                        .showUnderneathOf(button.getContextComponent());
+            }
+        });
+        myDecorator.setAddActionUpdater(new AnActionButtonUpdater() {
+            @Override
+            public boolean isEnabled(AnActionEvent e) {
+                return !getConfigurationsToAdd().isEmpty();
+            }
+        });
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        JPanel myDecoratorPanel = myDecorator.createPanel();
+        panel.add(myDecoratorPanel, BorderLayout.CENTER);
+        collectionsPanel.add(myDecoratorPanel);
+
+        configurationsListChanged.setVisible(false);
+
         return myMainPanel;
+    }
+
+    private void markConfigurationsChanged() {
+        // use hidden checkbox to fire the modified event;
+        configurationsListChanged.setSelected(!configurationsListChanged.isSelected());
     }
 
     @Override
