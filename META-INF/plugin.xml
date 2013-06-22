@@ -1,12 +1,51 @@
 <idea-plugin version="2">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>0.2</version>
+    <version>0.3</version>
     <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
-    <description><![CDATA[Allows to run multiple run configurations at once. This allows to group multiple run configurations and start them at once.]]></description>
+    <description>
+        <![CDATA[
+        <p>Allows to run multiple run configurations at once: group multiple run configurations and start them in a single click.
+        Not only application and test run configurations can be grouped, but other Multirun configurations can be organized
+        into single run configuration.</p>
 
-    <change-notes><![CDATA[]]>
+        <p>Usage:</p>
+        <ul>
+            <li>Start batch of tests for multiple modules or applications</li>
+            <li>Start multiple applications, like multiple servers or backend + web application</li>
+        </ul>
+
+        ]]>
+    </description>
+
+    <change-notes>
+        <![CDATA[
+        <p>0.3:</p>
+        <ul>
+            <li>Stop running configurations using menu Run -> Stop Multirun or shortcut Ctrl + Shift + K</li>
+            <li>Improve Multirun configuration edit form</li>
+            <li>Pin tabs when the re-use tabs option is disabled</li>
+            <li>Mark running configurations with *</li>
+            <li>Change in default configuration: tabs re-use is disabled, starting configurations one-by-one is enabled</li>
+            <li>Improved plugin description</li>
+        </ul>
+        <p>0.2:</p>
+        <ul>
+            <li>Enable Multirun for PyCharm, RubyMine, PhpStorm, WebStorm and AppCode</li>
+        </ul>
+        <p>0.1:</p>
+        <ul>
+            <li>Multirun run configuration option to group multiple run configurations and run them in a single click</li>
+            <li>Group multiple Multirun configurations in single master Multirun configuration to start everything</li>
+            <li>Basic configuration options:
+                <ul>
+                    <li>start configurations one-by-one or in parallel</li>
+                    <li>re-use the tabs or run each configuration in separate tab</li>
+                </ul>
+            </li>
+        </ul>
+        ]]>
     </change-notes>
 
     <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
