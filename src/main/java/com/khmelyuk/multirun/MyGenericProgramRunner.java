@@ -44,7 +44,7 @@ public class MyGenericProgramRunner extends GenericProgramRunner {
                                                                    RunContentDescriptor.class, ExecutionEnvironment.class);
             doExecute.setAccessible(true);
             RunContentDescriptor descriptor = (RunContentDescriptor) doExecute.invoke(runner, project, executor, state, null, env);
-            return new MyRunContentDescriptor(descriptor, false);
+            return new MyRunContentDescriptor(descriptor);
         } catch (Exception e) {
             e.printStackTrace();
         }

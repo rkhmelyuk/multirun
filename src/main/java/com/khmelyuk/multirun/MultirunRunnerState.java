@@ -63,17 +63,11 @@ public class MultirunRunnerState implements RunnableState {
             RunContentDescriptor runContentDescriptor = null;
             if (separateTabs) {
                 runContentDescriptor = getRunContentDescriptor(runConfiguration, project);
-                if (runContentDescriptor instanceof MyRunContentDescriptor) {
-                    // mark it as re-usable as it exists already
-                    ((MyRunContentDescriptor) runContentDescriptor).reusable = true;
-                }
                 if (runContentDescriptor == null && runner instanceof GenericProgramRunner) {
                     // use custom runner that will start each configuration in separate task
                     runner = new MyGenericProgramRunner((GenericProgramRunner) runner);
                 }
             }
-
-            // TODO - auto pin?
 
             ExecutionEnvironment executionEnvironment = new ExecutionEnvironmentBuilder()
                     .setRunnerAndSettings(runner, configuration)

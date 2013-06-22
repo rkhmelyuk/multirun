@@ -12,39 +12,29 @@ import com.intellij.openapi.util.Key;
  */
 public class MyRunContentDescriptor extends RunContentDescriptor {
 
-    boolean reusable = false;
-
-    public MyRunContentDescriptor(final RunContentDescriptor descriptor, boolean reusable) {
+    public MyRunContentDescriptor(final RunContentDescriptor descriptor) {
         super(descriptor.getExecutionConsole(), descriptor.getProcessHandler(),
               descriptor.getComponent(), descriptor.getDisplayName(), descriptor.getIcon());
-        descriptor.getProcessHandler().addProcessListener(new ProcessListener() {
-            @Override
-            public void startNotified(ProcessEvent processEvent) {
-            }
+        if (descriptor.getProcessHandler() != null) {
+            //noinspection ConstantConditions
+            descriptor.getProcessHandler().addProcessListener(new ProcessListener() {
+                @Override
+                public void startNotified(ProcessEvent processEvent) {
+                    if (MyRunContentDescriptor.this.getAttachedContent() != null) {
+                        MyRunContentDescriptor.this.getAttachedContent().setPinned(true);
+                    }
+                }
 
-            @Override
-            public void processTerminated(ProcessEvent processEvent) {
-                MyRunContentDescriptor.this.reusable = true;
-            }
+                @Override
+                public void processTerminated(ProcessEvent processEvent) { }
 
-            @Override
-            public void processWillTerminate(ProcessEvent processEvent, boolean b) {
-                MyRunContentDescriptor.this.reusable = true;
-            }
+                @Override
+                public void processWillTerminate(ProcessEvent processEvent, boolean b) { }
 
+                @Override
+                public void onTextAvailable(ProcessEvent processEvent, Key key) { }
 
-            @Override
-            public void onTextAvailable(ProcessEvent processEvent, Key key) {
-            }
+            });
         }
-
-        );
-//        descriptor.getAttachedContent().setPinned(true);
-        this.reusable = reusable;
-    }
-
-    @Override
-    public boolean isContentReuseProhibited() {
-        return !reusable;
     }
 }
