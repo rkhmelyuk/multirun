@@ -21,7 +21,7 @@ import java.util.List;
 
 public class MultirunRunConfiguration extends RunConfigurationBase {
 
-    private boolean separateTabs = false;
+    private boolean separateTabs = true;
     private boolean startOneByOne = true;
     private List<RunConfiguration> runConfigurations = new ArrayList<RunConfiguration>();
 
