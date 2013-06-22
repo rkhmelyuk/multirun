@@ -24,6 +24,11 @@
 
     <actions>
         <!-- Add your actions here -->
+        <action id="stopRunningMultirunConfiguration" class="com.khmelyuk.multirun.StopRunningMultirunConfigurationsAction"
+                text="Stop Multirun" description="Stop Running Multirun Configurations" icon="/actions/suspend.png">
+            <add-to-group group-id="RunMenu" relative-to-action="Stop" anchor="after"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl K"/>
+        </action>
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">

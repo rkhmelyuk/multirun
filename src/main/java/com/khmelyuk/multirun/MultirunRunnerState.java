@@ -5,12 +5,21 @@ import com.intellij.execution.configurations.*;
 import com.intellij.execution.impl.RunDialog;
 import com.intellij.execution.impl.RunManagerImpl;
 import com.intellij.execution.impl.RunnerAndConfigurationSettingsImpl;
-import com.intellij.execution.runners.*;
+import com.intellij.execution.process.ProcessEvent;
+import com.intellij.execution.process.ProcessListener;
+import com.intellij.execution.runners.ExecutionEnvironment;
+import com.intellij.execution.runners.ExecutionEnvironmentBuilder;
+import com.intellij.execution.runners.ExecutionUtil;
+import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.internal.statistic.UsageTrigger;
 import com.intellij.internal.statistic.beans.ConvertUsagesUtil;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.impl.ActionManagerImpl;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.NotNullFunction;
 import org.jetbrains.annotations.NotNull;
@@ -24,17 +33,23 @@ public class MultirunRunnerState implements RunnableState {
     private boolean separateTabs;
     private boolean startOneByOne;
     private List<RunConfiguration> runConfigurations;
+    private StopRunningMultirunConfigurationsAction stopRunningMultirunConfiguration;
 
     public MultirunRunnerState(List<RunConfiguration> runConfigurations, boolean startOneByOne, boolean separateTabs) {
         this.startOneByOne = startOneByOne;
         this.separateTabs = separateTabs;
         this.runConfigurations = runConfigurations;
+
+        ActionManager actionManager = ActionManagerImpl.getInstance();
+        stopRunningMultirunConfiguration = (StopRunningMultirunConfigurationsAction) actionManager.getAction("stopRunningMultirunConfiguration");
     }
 
     @Nullable
     @Override
     public ExecutionResult execute(Executor executor, @NotNull ProgramRunner programRunner) throws ExecutionException {
+        stopRunningMultirunConfiguration.beginStaringConfigurations();
         runConfigurations(executor, runConfigurations, 0);
+        stopRunningMultirunConfiguration.doneStaringConfigurations();
         return null;
     }
 
@@ -42,6 +57,11 @@ public class MultirunRunnerState implements RunnableState {
         if (runConfigurations.size() <= index) {
             return;
         }
+        if (!stopRunningMultirunConfiguration.canContinueStartingConfigurations()) {
+            // don't start more configurations if user stopped the plugin work.
+            return;
+        }
+
         final RunConfiguration runConfiguration = runConfigurations.get(index);
         final Project project = runConfiguration.getProject();
         final RunnerAndConfigurationSettings configuration = new RunnerAndConfigurationSettingsImpl(
@@ -50,25 +70,11 @@ public class MultirunRunnerState implements RunnableState {
         boolean started = false;
         try {
             ProgramRunner runner = RunnerRegistry.getInstance().getRunner(executor.getId(), runConfiguration);
-            if (runner == null) {
-                return;
-            }
-
-            if (!checkRunConfiguration(executor, project, configuration)) {
-                return;
-            }
+            if (runner == null) return;
+            if (!checkRunConfiguration(executor, project, configuration)) return;
 
             runTriggers(executor, configuration);
-
-            RunContentDescriptor runContentDescriptor = null;
-            if (separateTabs) {
-                runContentDescriptor = getRunContentDescriptor(runConfiguration, project);
-                if (runContentDescriptor == null && runner instanceof GenericProgramRunner) {
-                    // use custom runner that will start each configuration in separate task
-                    runner = new MyGenericProgramRunner((GenericProgramRunner) runner);
-                }
-            }
-
+            RunContentDescriptor runContentDescriptor = getRunContentDescriptor(runConfiguration, project);
             ExecutionEnvironment executionEnvironment = new ExecutionEnvironmentBuilder()
                     .setRunnerAndSettings(runner, configuration)
                     .setRunProfile(runConfiguration)
@@ -76,9 +82,52 @@ public class MultirunRunnerState implements RunnableState {
                     .setProject(project).build();
 
             runner.execute(executor, executionEnvironment, new ProgramRunner.Callback() {
+                @SuppressWarnings("ConstantConditions")
                 @Override
                 public void processStarted(final RunContentDescriptor descriptor) {
+                    if (descriptor.getProcessHandler() != null) {
+                        descriptor.getProcessHandler().addProcessListener(new ProcessListener() {
+                            @SuppressWarnings("ConstantConditions")
+                            @Override
+                            public void startNotified(ProcessEvent processEvent) {
+                                if (descriptor.getAttachedContent() != null) {
+                                    if (!stopRunningMultirunConfiguration.canContinueStartingConfigurations()) {
+                                        descriptor.getProcessHandler().destroyProcess();
+                                        if (!descriptor.getAttachedContent().isPinned() && !startOneByOne) {
+                                            // check if not pinned, to avoid destroying already existed tab
+                                            // and if start one by one - no need to close the console tab, as it's won't be shown
+                                            // as other checks disallow starting it
+                                            descriptor.getAttachedContent().getManager().removeContent(descriptor.getAttachedContent(), false);
+                                        }
+                                    } else {
+                                        // mark all current console tab as pinned
+                                        descriptor.getAttachedContent().setPinned(true);
+                                    }
+                                }
+                            }
+
+                            @Override public void processTerminated(ProcessEvent processEvent) {
+                                if (descriptor.getAttachedContent() != null) {
+                                    ApplicationManager.getApplication().invokeLater(new Runnable() {
+                                        @Override public void run() {
+                                            if (!separateTabs) {
+                                                // un-pin the console tab if re-use is allowed, so the tab could be re-used soon
+                                                descriptor.getAttachedContent().setPinned(false);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+
+                            @Override public void processWillTerminate(ProcessEvent processEvent, boolean b) { }
+
+                            @Override public void onTextAvailable(ProcessEvent processEvent, Key key) { }
+                        });
+                    }
+                    stopRunningMultirunConfiguration.addProcess(project, descriptor.getProcessHandler());
+
                     if (startOneByOne) {
+                        // start next configuration..
                         runConfigurations(executor, runConfigurations, index + 1);
                     }
                 }
@@ -140,8 +189,8 @@ public class MultirunRunnerState implements RunnableState {
                 new NotNullFunction<String, Boolean>() {
                     @NotNull
                     @Override
-                    public Boolean fun(String dom) {
-                        return runConfiguration.getName().equals(dom);
+                    public Boolean fun(String name) {
+                        return runConfiguration.getName().equals(name);
                     }
                 });
 
