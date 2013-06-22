@@ -5,8 +5,8 @@ import com.intellij.execution.configurations.*;
 import com.intellij.execution.impl.RunDialog;
 import com.intellij.execution.impl.RunManagerImpl;
 import com.intellij.execution.impl.RunnerAndConfigurationSettingsImpl;
+import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;
-import com.intellij.execution.process.ProcessListener;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ExecutionEnvironmentBuilder;
 import com.intellij.execution.runners.ExecutionUtil;
@@ -19,7 +19,6 @@ import com.intellij.openapi.actionSystem.impl.ActionManagerImpl;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.NotNullFunction;
 import org.jetbrains.annotations.NotNull;
@@ -86,7 +85,7 @@ public class MultirunRunnerState implements RunnableState {
                 @Override
                 public void processStarted(final RunContentDescriptor descriptor) {
                     if (descriptor.getProcessHandler() != null) {
-                        descriptor.getProcessHandler().addProcessListener(new ProcessListener() {
+                        descriptor.getProcessHandler().addProcessListener(new ProcessAdapter() {
                             @SuppressWarnings("ConstantConditions")
                             @Override
                             public void startNotified(ProcessEvent processEvent) {
@@ -102,6 +101,9 @@ public class MultirunRunnerState implements RunnableState {
                                     } else {
                                         // mark all current console tab as pinned
                                         descriptor.getAttachedContent().setPinned(true);
+
+                                        // mark running process tab with *
+                                        descriptor.getAttachedContent().setDisplayName(descriptor.getDisplayName() + "*");
                                     }
                                 }
                             }
@@ -114,14 +116,16 @@ public class MultirunRunnerState implements RunnableState {
                                                 // un-pin the console tab if re-use is allowed, so the tab could be re-used soon
                                                 descriptor.getAttachedContent().setPinned(false);
                                             }
+                                            // remove the * used to identify running process
+                                            descriptor.getAttachedContent().setDisplayName(descriptor.getDisplayName());
                                         }
                                     });
                                 }
                             }
 
-                            @Override public void processWillTerminate(ProcessEvent processEvent, boolean b) { }
-
-                            @Override public void onTextAvailable(ProcessEvent processEvent, Key key) { }
+                            @Override public void processWillTerminate(ProcessEvent processEvent, boolean willBeDestroyed) {
+                                processTerminated(processEvent);
+                            }
                         });
                     }
                     stopRunningMultirunConfiguration.addProcess(project, descriptor.getProcessHandler());
