@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>0.3</version>
+    <version>0.4</version>
     <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
     <description>
@@ -21,6 +21,13 @@
 
     <change-notes>
         <![CDATA[
+        <p>0.4:</p>
+        <ul>
+            <li>Mark the tab for failed process</li>
+            <li>Added option to close tabs for successfully completed run configurations</li>
+            <li>Better description for configuration options</li>
+            <li>Do not re-use the tab of failed run configuration</li>
+        </ul>
         <p>0.3:</p>
         <ul>
             <li>Stop running configurations using menu Run -> Stop Multirun or shortcut Ctrl + Shift + K</li>
