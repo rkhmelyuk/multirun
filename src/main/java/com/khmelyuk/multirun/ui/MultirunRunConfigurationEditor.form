@@ -44,7 +44,7 @@
             </constraints>
             <properties>
               <actionCommand value=""/>
-              <text value="&lt;html&gt;Re-use tabs to run configurations&lt;div style=&quot;font-size: 11pt; width: 400px;&quot;&gt;Enable re-using the tab of already completed run configuration. This is like default IDE behavior.&lt;/div&gt;&lt;/html&gt;"/>
+              <text value="&lt;html&gt;Re-use tabs to run configurations&lt;div style=&quot;font-size: 11pt; width: 400px;&quot;&gt;Enable re-using the tab of successfully completed run configuration. This is like default IDE behavior, except failed configurations aren't re-used.&lt;/div&gt;&lt;/html&gt;"/>
               <toolTipText value=""/>
               <verticalAlignment value="1"/>
               <verticalTextPosition value="1"/>

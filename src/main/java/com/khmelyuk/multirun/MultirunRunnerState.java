@@ -103,6 +103,7 @@ public class MultirunRunnerState implements RunnableState {
                             public void startNotified(ProcessEvent processEvent) {
                                 Content content = descriptor.getAttachedContent();
                                 if (content != null) {
+                                    content.setIcon(descriptor.getIcon());
                                     if (!stopRunningMultirunConfiguration.canContinueStartingConfigurations()) {
                                         // Multirun was stopped - destroy processes that are still starting up
                                         processHandler.destroyProcess();
@@ -144,7 +145,11 @@ public class MultirunRunnerState implements RunnableState {
                                     @Override
                                     public void run() {
                                         final Content content = descriptor.getAttachedContent();
-                                        if (terminated && hideSuccessProcess && processEvent.getExitCode() == 0) {
+
+                                        // exit code is 0 if the process completed successfully
+                                        final boolean completedSuccessfully = (terminated && processEvent.getExitCode() == 0);
+
+                                        if (hideSuccessProcess && completedSuccessfully) {
                                             // close the tab for the success process and exit - nothing else could be done
                                             if (content.getManager() != null) {
                                                 content.getManager().removeContent(content, false);
@@ -152,8 +157,9 @@ public class MultirunRunnerState implements RunnableState {
                                             }
                                         }
 
-                                        if (!separateTabs) {
-                                            // un-pin the console tab if re-use is allowed, so the tab could be re-used soon
+                                        if (!separateTabs && completedSuccessfully) {
+                                            // un-pin the console tab if re-use is allowed and process completed successfully,
+                                            // so the tab could be re-used for other processes
                                             content.setPinned(false);
                                         }
 
