@@ -35,6 +35,7 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
     private JCheckBox reuseTabs;
     private JPanel collectionsPanel;
     private JCheckBox configurationsListChanged;
+    private JCheckBox markFailedProcess;
     private MultirunRunConfiguration configuration;
 
     public MultirunRunConfigurationEditor(final Project project) {
@@ -72,12 +73,14 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
 
         reuseTabs.setSelected(!multirunRunConfiguration.isSeparateTabs());
         startOneByOne.setSelected(multirunRunConfiguration.isStartOneByOne());
+        markFailedProcess.setSelected(multirunRunConfiguration.isMarkFailedProcess());
     }
 
     @Override
     protected void applyEditorTo(MultirunRunConfiguration multirunRunConfiguration) throws ConfigurationException {
         multirunRunConfiguration.setSeparateTabs(!reuseTabs.isSelected());
         multirunRunConfiguration.setStartOneByOne(startOneByOne.isSelected());
+        multirunRunConfiguration.setMarkFailedProcess(markFailedProcess.isSelected());
 
         RunConfiguration[] buffer = new RunConfiguration[configurations.getModel().getSize()];
         ((DefaultListModel) configurations.getModel()).copyInto(buffer);

@@ -21,8 +21,13 @@ import java.util.List;
 
 public class MultirunRunConfiguration extends RunConfigurationBase {
 
+    public static final String PROP_SEPARATE_TABS = "separateTabs";
+    public static final String PROP_START_ONE_BY_ONE = "startOneByOne";
+    public static final String PROP_MARK_FAILED_PROCESS = "markFailedProcess";
+
     private boolean separateTabs = true;
     private boolean startOneByOne = true;
+    private boolean markFailedProcess = true;
     private List<RunConfiguration> runConfigurations = new ArrayList<RunConfiguration>();
 
     public MultirunRunConfiguration(Project project, ConfigurationFactory factory, String name) {
@@ -53,6 +58,14 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
         this.startOneByOne = startOneByOne;
     }
 
+    public boolean isMarkFailedProcess() {
+        return markFailedProcess;
+    }
+
+    public void setMarkFailedProcess(boolean markFailedProcess) {
+        this.markFailedProcess = markFailedProcess;
+    }
+
     @Override
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
         return new MultirunRunConfigurationEditor(getProject());
@@ -61,19 +74,22 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
     @Override
     public void readExternal(Element element) throws InvalidDataException {
         super.readExternal(element);
-        if (element.getAttributeValue("startOneByOne") != null) {
-            startOneByOne = Boolean.parseBoolean(element.getAttributeValue("startOneByOne"));
+        if (element.getAttributeValue(PROP_START_ONE_BY_ONE) != null) {
+            startOneByOne = Boolean.parseBoolean(element.getAttributeValue(PROP_START_ONE_BY_ONE));
         }
-        if (element.getAttributeValue("separateTabs") != null) {
-            separateTabs = Boolean.parseBoolean(element.getAttributeValue("separateTabs"));
+        if (element.getAttributeValue(PROP_SEPARATE_TABS) != null) {
+            separateTabs = Boolean.parseBoolean(element.getAttributeValue(PROP_SEPARATE_TABS));
+        }
+        if (element.getAttributeValue(PROP_MARK_FAILED_PROCESS) != null) {
+            markFailedProcess = Boolean.parseBoolean(element.getAttributeValue(PROP_MARK_FAILED_PROCESS));
         }
 
-        RunConfiguration[] allConfigurations = RunManager.getInstance(getProject()).getAllConfigurations();
+        final RunConfiguration[] allConfigurations = RunManager.getInstance(getProject()).getAllConfigurations();
         for (Object each : element.getContent()) {
             if (!(each instanceof Element)) {
                 continue;
             }
-            Element eachElement = (Element) each;
+            final Element eachElement = (Element) each;
             if (!eachElement.getName().equals("runConfiguration")) {
                 continue;
             }
@@ -101,9 +117,12 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
     @Override
     public void writeExternal(Element element) throws WriteExternalException {
         super.writeExternal(element);
-        element.setAttribute("startOneByOne", String.valueOf(startOneByOne));
-        element.setAttribute("separateTabs", String.valueOf(separateTabs));
-        List<Element> configurations = new ArrayList<Element>();
+
+        element.setAttribute(PROP_START_ONE_BY_ONE, String.valueOf(startOneByOne));
+        element.setAttribute(PROP_SEPARATE_TABS, String.valueOf(separateTabs));
+        element.setAttribute(PROP_MARK_FAILED_PROCESS, String.valueOf(markFailedProcess));
+
+        final List<Element> configurations = new ArrayList<Element>();
         for (RunConfiguration each : runConfigurations) {
             Element runConfiguration = new Element("runConfiguration");
             runConfiguration.setAttribute("name", each.getName());
@@ -128,7 +147,7 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
     @Nullable
     @Override
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment executionEnvironment) throws ExecutionException {
-        return new MultirunRunnerState(runConfigurations, startOneByOne, separateTabs);
+        return new MultirunRunnerState(runConfigurations, startOneByOne, separateTabs, markFailedProcess);
     }
 
     @Override

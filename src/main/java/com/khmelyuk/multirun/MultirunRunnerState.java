@@ -7,19 +7,23 @@ import com.intellij.execution.impl.RunManagerImpl;
 import com.intellij.execution.impl.RunnerAndConfigurationSettingsImpl;
 import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;
+import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ExecutionEnvironmentBuilder;
 import com.intellij.execution.runners.ExecutionUtil;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.RunContentDescriptor;
+import com.intellij.icons.AllIcons;
 import com.intellij.internal.statistic.UsageTrigger;
 import com.intellij.internal.statistic.beans.ConvertUsagesUtil;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.impl.ActionManagerImpl;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.impl.LaterInvocator;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.ui.LayeredIcon;
+import com.intellij.ui.content.Content;
 import com.intellij.util.NotNullFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,13 +35,15 @@ public class MultirunRunnerState implements RunnableState {
 
     private boolean separateTabs;
     private boolean startOneByOne;
+    private boolean markFailedProcess;
     private List<RunConfiguration> runConfigurations;
     private StopRunningMultirunConfigurationsAction stopRunningMultirunConfiguration;
 
-    public MultirunRunnerState(List<RunConfiguration> runConfigurations, boolean startOneByOne, boolean separateTabs) {
+    public MultirunRunnerState(List<RunConfiguration> runConfigurations, boolean startOneByOne, boolean separateTabs, boolean markFailedProcess) {
         this.startOneByOne = startOneByOne;
         this.separateTabs = separateTabs;
         this.runConfigurations = runConfigurations;
+        this.markFailedProcess = markFailedProcess;
 
         ActionManager actionManager = ActionManagerImpl.getInstance();
         stopRunningMultirunConfiguration = (StopRunningMultirunConfigurationsAction) actionManager.getAction("stopRunningMultirunConfiguration");
@@ -84,43 +90,61 @@ public class MultirunRunnerState implements RunnableState {
                 @SuppressWarnings("ConstantConditions")
                 @Override
                 public void processStarted(final RunContentDescriptor descriptor) {
-                    if (descriptor.getProcessHandler() != null) {
-                        descriptor.getProcessHandler().addProcessListener(new ProcessAdapter() {
+                    final ProcessHandler processHandler = descriptor.getProcessHandler();
+                    if (processHandler != null) {
+                        processHandler.addProcessListener(new ProcessAdapter() {
                             @SuppressWarnings("ConstantConditions")
                             @Override
                             public void startNotified(ProcessEvent processEvent) {
-                                if (descriptor.getAttachedContent() != null) {
+                                Content content = descriptor.getAttachedContent();
+                                if (content != null) {
                                     if (!stopRunningMultirunConfiguration.canContinueStartingConfigurations()) {
-                                        descriptor.getProcessHandler().destroyProcess();
-                                        if (!descriptor.getAttachedContent().isPinned() && !startOneByOne) {
+                                        // Multirun was stopped - destroy processes that are still starting up
+                                        processHandler.destroyProcess();
+
+                                        if (!content.isPinned() && !startOneByOne) {
                                             // check if not pinned, to avoid destroying already existed tab
                                             // and if start one by one - no need to close the console tab, as it's won't be shown
                                             // as other checks disallow starting it
-                                            descriptor.getAttachedContent().getManager().removeContent(descriptor.getAttachedContent(), false);
+                                            content.getManager().removeContent(content, false);
                                         }
                                     } else {
                                         // mark all current console tab as pinned
-                                        descriptor.getAttachedContent().setPinned(true);
+                                        content.setPinned(true);
 
                                         // mark running process tab with *
-                                        descriptor.getAttachedContent().setDisplayName(descriptor.getDisplayName() + "*");
+                                        content.setDisplayName(descriptor.getDisplayName() + "*");
                                     }
                                 }
                             }
 
-                            @Override public void processTerminated(ProcessEvent processEvent) {
-                                if (descriptor.getAttachedContent() != null) {
-                                    ApplicationManager.getApplication().invokeLater(new Runnable() {
-                                        @Override public void run() {
-                                            if (!separateTabs) {
-                                                // un-pin the console tab if re-use is allowed, so the tab could be re-used soon
-                                                descriptor.getAttachedContent().setPinned(false);
-                                            }
-                                            // remove the * used to identify running process
-                                            descriptor.getAttachedContent().setDisplayName(descriptor.getDisplayName());
-                                        }
-                                    });
+                            @Override public void processTerminated(final ProcessEvent processEvent) {
+                                if (descriptor.getAttachedContent() == null) {
+                                    return;
                                 }
+
+                                LaterInvocator.invokeLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        final Content content = descriptor.getAttachedContent();
+                                        if (!separateTabs) {
+                                            // un-pin the console tab if re-use is allowed, so the tab could be re-used soon
+                                            content.setPinned(false);
+                                        }
+                                        // remove the * used to identify running process
+                                        content.setDisplayName(descriptor.getDisplayName());
+
+                                        // add the alert icon in case if process existed with non-0 status
+                                        if (markFailedProcess && processEvent.getExitCode() != 0) {
+                                            LaterInvocator.invokeLater(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    content.setIcon(LayeredIcon.create(content.getIcon(), AllIcons.Nodes.TabAlert));
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
                             }
 
                             @Override public void processWillTerminate(ProcessEvent processEvent, boolean willBeDestroyed) {
@@ -128,7 +152,7 @@ public class MultirunRunnerState implements RunnableState {
                             }
                         });
                     }
-                    stopRunningMultirunConfiguration.addProcess(project, descriptor.getProcessHandler());
+                    stopRunningMultirunConfiguration.addProcess(project, processHandler);
 
                     if (startOneByOne) {
                         // start next configuration..
