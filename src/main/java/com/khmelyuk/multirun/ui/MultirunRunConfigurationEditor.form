@@ -10,7 +10,7 @@
       <color color="-10066330"/>
     </border>
     <children>
-      <grid id="41447" binding="myMainPanel" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="41447" binding="myMainPanel" layout-manager="GridLayoutManager" row-count="6" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -42,7 +42,8 @@
             </constraints>
             <properties>
               <actionCommand value=""/>
-              <text value="Reuse tabs to run configurations"/>
+              <text value="Re-use tabs to run configurations"/>
+              <toolTipText value="Enable re-using the tab of already completed run configuration for the newly started one."/>
             </properties>
           </component>
           <grid id="5c519" binding="collectionsPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
@@ -72,6 +73,17 @@
             </constraints>
             <properties>
               <text value="Mark the tab of failed run configuration"/>
+              <toolTipText value="Add the icon to the tab with failed run configuration. This allows quickly visually identify the tab with failed applications or tests."/>
+            </properties>
+          </component>
+          <component id="45507" class="javax.swing.JCheckBox" binding="hideSuccessProcess">
+            <constraints>
+              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <selected value="false"/>
+              <text value="Hide the tab of successfully completed run configuration"/>
+              <toolTipText value="Allows to hide the tabs for the run configurations that completed successfully. Useful for test run configurations, to hide success tests, and leave open only failed tests."/>
             </properties>
           </component>
         </children>

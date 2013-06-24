@@ -36,14 +36,19 @@ public class MultirunRunnerState implements RunnableState {
     private boolean separateTabs;
     private boolean startOneByOne;
     private boolean markFailedProcess;
+    private boolean hideSuccessProcess = true;
     private List<RunConfiguration> runConfigurations;
     private StopRunningMultirunConfigurationsAction stopRunningMultirunConfiguration;
 
-    public MultirunRunnerState(List<RunConfiguration> runConfigurations, boolean startOneByOne, boolean separateTabs, boolean markFailedProcess) {
-        this.startOneByOne = startOneByOne;
+    public MultirunRunnerState(List<RunConfiguration> runConfigurations,
+                               boolean startOneByOne, boolean separateTabs,
+                               boolean markFailedProcess, boolean hideSuccessProcess) {
+
         this.separateTabs = separateTabs;
+        this.startOneByOne = startOneByOne;
         this.runConfigurations = runConfigurations;
         this.markFailedProcess = markFailedProcess;
+        this.hideSuccessProcess = hideSuccessProcess;
 
         ActionManager actionManager = ActionManagerImpl.getInstance();
         stopRunningMultirunConfiguration = (StopRunningMultirunConfigurationsAction) actionManager.getAction("stopRunningMultirunConfiguration");
@@ -103,10 +108,14 @@ public class MultirunRunnerState implements RunnableState {
                                         processHandler.destroyProcess();
 
                                         if (!content.isPinned() && !startOneByOne) {
-                                            // check if not pinned, to avoid destroying already existed tab
-                                            // and if start one by one - no need to close the console tab, as it's won't be shown
+                                            // checks if not pinned, to avoid destroying already existed tab
+                                            // checks if start one by one - no need to close the console tab, as it's won't be shown
                                             // as other checks disallow starting it
-                                            content.getManager().removeContent(content, false);
+
+                                            // content.getManager() can be null, if content is removed already as part of destroy above
+                                            if (content.getManager() != null) {
+                                                content.getManager().removeContent(content, false);
+                                            }
                                         }
                                     } else {
                                         // mark all current console tab as pinned
@@ -119,6 +128,14 @@ public class MultirunRunnerState implements RunnableState {
                             }
 
                             @Override public void processTerminated(final ProcessEvent processEvent) {
+                                onTermination(processEvent, true);
+                            }
+
+                            @Override public void processWillTerminate(ProcessEvent processEvent, boolean willBeDestroyed) {
+                                onTermination(processEvent, false);
+                            }
+
+                            private void onTermination(final ProcessEvent processEvent, final boolean terminated) {
                                 if (descriptor.getAttachedContent() == null) {
                                     return;
                                 }
@@ -127,10 +144,19 @@ public class MultirunRunnerState implements RunnableState {
                                     @Override
                                     public void run() {
                                         final Content content = descriptor.getAttachedContent();
+                                        if (terminated && hideSuccessProcess && processEvent.getExitCode() == 0) {
+                                            // close the tab for the success process and exit - nothing else could be done
+                                            if (content.getManager() != null) {
+                                                content.getManager().removeContent(content, false);
+                                                return;
+                                            }
+                                        }
+
                                         if (!separateTabs) {
                                             // un-pin the console tab if re-use is allowed, so the tab could be re-used soon
                                             content.setPinned(false);
                                         }
+
                                         // remove the * used to identify running process
                                         content.setDisplayName(descriptor.getDisplayName());
 
@@ -145,10 +171,6 @@ public class MultirunRunnerState implements RunnableState {
                                         }
                                     }
                                 });
-                            }
-
-                            @Override public void processWillTerminate(ProcessEvent processEvent, boolean willBeDestroyed) {
-                                processTerminated(processEvent);
                             }
                         });
                     }

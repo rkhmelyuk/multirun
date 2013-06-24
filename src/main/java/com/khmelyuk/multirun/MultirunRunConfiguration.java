@@ -24,10 +24,12 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
     public static final String PROP_SEPARATE_TABS = "separateTabs";
     public static final String PROP_START_ONE_BY_ONE = "startOneByOne";
     public static final String PROP_MARK_FAILED_PROCESS = "markFailedProcess";
+    public static final String PROP_HIDE_SUCCESS_PROCESS = "hideSuccessProcess";
 
     private boolean separateTabs = true;
     private boolean startOneByOne = true;
     private boolean markFailedProcess = true;
+    private boolean hideSuccessProcess = false;
     private List<RunConfiguration> runConfigurations = new ArrayList<RunConfiguration>();
 
     public MultirunRunConfiguration(Project project, ConfigurationFactory factory, String name) {
@@ -66,6 +68,14 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
         this.markFailedProcess = markFailedProcess;
     }
 
+    public boolean isHideSuccessProcess() {
+        return hideSuccessProcess;
+    }
+
+    public void setHideSuccessProcess(boolean hideSuccessProcess) {
+        this.hideSuccessProcess = hideSuccessProcess;
+    }
+
     @Override
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
         return new MultirunRunConfigurationEditor(getProject());
@@ -74,14 +84,18 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
     @Override
     public void readExternal(Element element) throws InvalidDataException {
         super.readExternal(element);
-        if (element.getAttributeValue(PROP_START_ONE_BY_ONE) != null) {
-            startOneByOne = Boolean.parseBoolean(element.getAttributeValue(PROP_START_ONE_BY_ONE));
-        }
+
         if (element.getAttributeValue(PROP_SEPARATE_TABS) != null) {
             separateTabs = Boolean.parseBoolean(element.getAttributeValue(PROP_SEPARATE_TABS));
         }
+        if (element.getAttributeValue(PROP_START_ONE_BY_ONE) != null) {
+            startOneByOne = Boolean.parseBoolean(element.getAttributeValue(PROP_START_ONE_BY_ONE));
+        }
         if (element.getAttributeValue(PROP_MARK_FAILED_PROCESS) != null) {
             markFailedProcess = Boolean.parseBoolean(element.getAttributeValue(PROP_MARK_FAILED_PROCESS));
+        }
+        if (element.getAttributeValue(PROP_HIDE_SUCCESS_PROCESS) != null) {
+            hideSuccessProcess = Boolean.parseBoolean(element.getAttributeValue(PROP_HIDE_SUCCESS_PROCESS));
         }
 
         final RunConfiguration[] allConfigurations = RunManager.getInstance(getProject()).getAllConfigurations();
@@ -110,7 +124,6 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
                     break;
                 }
             }
-
         }
     }
 
@@ -118,9 +131,10 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
     public void writeExternal(Element element) throws WriteExternalException {
         super.writeExternal(element);
 
-        element.setAttribute(PROP_START_ONE_BY_ONE, String.valueOf(startOneByOne));
         element.setAttribute(PROP_SEPARATE_TABS, String.valueOf(separateTabs));
+        element.setAttribute(PROP_START_ONE_BY_ONE, String.valueOf(startOneByOne));
         element.setAttribute(PROP_MARK_FAILED_PROCESS, String.valueOf(markFailedProcess));
+        element.setAttribute(PROP_HIDE_SUCCESS_PROCESS, String.valueOf(hideSuccessProcess));
 
         final List<Element> configurations = new ArrayList<Element>();
         for (RunConfiguration each : runConfigurations) {
@@ -147,7 +161,7 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
     @Nullable
     @Override
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment executionEnvironment) throws ExecutionException {
-        return new MultirunRunnerState(runConfigurations, startOneByOne, separateTabs, markFailedProcess);
+        return new MultirunRunnerState(runConfigurations, startOneByOne, separateTabs, markFailedProcess, hideSuccessProcess);
     }
 
     @Override

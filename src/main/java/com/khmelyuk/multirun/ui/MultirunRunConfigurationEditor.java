@@ -28,14 +28,16 @@ import java.util.Arrays;
  */
 @SuppressWarnings("unchecked")
 public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunConfiguration> {
+
     private Project project;
     private JPanel myMainPanel;
     private JBList configurations;
-    private JCheckBox startOneByOne;
-    private JCheckBox reuseTabs;
     private JPanel collectionsPanel;
-    private JCheckBox configurationsListChanged;
+    private JCheckBox reuseTabs;
+    private JCheckBox startOneByOne;
     private JCheckBox markFailedProcess;
+    private JCheckBox hideSuccessProcess;
+    private JCheckBox configurationsListChanged;
     private MultirunRunConfiguration configuration;
 
     public MultirunRunConfigurationEditor(final Project project) {
@@ -74,6 +76,7 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
         reuseTabs.setSelected(!multirunRunConfiguration.isSeparateTabs());
         startOneByOne.setSelected(multirunRunConfiguration.isStartOneByOne());
         markFailedProcess.setSelected(multirunRunConfiguration.isMarkFailedProcess());
+        hideSuccessProcess.setSelected(multirunRunConfiguration.isHideSuccessProcess());
     }
 
     @Override
@@ -81,6 +84,7 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
         multirunRunConfiguration.setSeparateTabs(!reuseTabs.isSelected());
         multirunRunConfiguration.setStartOneByOne(startOneByOne.isSelected());
         multirunRunConfiguration.setMarkFailedProcess(markFailedProcess.isSelected());
+        multirunRunConfiguration.setHideSuccessProcess(hideSuccessProcess.isSelected());
 
         RunConfiguration[] buffer = new RunConfiguration[configurations.getModel().getSize()];
         ((DefaultListModel) configurations.getModel()).copyInto(buffer);
