@@ -3,7 +3,7 @@
   <grid id="27dc6" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="507" height="405"/>
+      <xy x="20" y="20" width="569" height="405"/>
     </constraints>
     <properties/>
     <border type="line">
@@ -30,20 +30,24 @@
           </component>
           <component id="d2780" class="javax.swing.JCheckBox" binding="startOneByOne">
             <constraints>
-              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Start each configuration one by one"/>
+              <text value="&lt;html&gt;Start each configuration one by one&lt;div style=&quot;font-size: 11pt; width: 400px;&quot;&gt;Start next configuration only after the previous configuration has been started. This may increase the start period, as &quot;before launch&quot; operations run one-by-one, not in parallel.&lt;/div&gt;&lt;/html&gt;"/>
+              <verticalAlignment value="1"/>
+              <verticalTextPosition value="1"/>
             </properties>
           </component>
           <component id="c3f8" class="javax.swing.JCheckBox" binding="reuseTabs">
             <constraints>
-              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <actionCommand value=""/>
-              <text value="Re-use tabs to run configurations"/>
-              <toolTipText value="Enable re-using the tab of already completed run configuration for the newly started one."/>
+              <text value="&lt;html&gt;Re-use tabs to run configurations&lt;div style=&quot;font-size: 11pt; width: 400px;&quot;&gt;Enable re-using the tab of already completed run configuration. This is like default IDE behavior.&lt;/div&gt;&lt;/html&gt;"/>
+              <toolTipText value=""/>
+              <verticalAlignment value="1"/>
+              <verticalTextPosition value="1"/>
             </properties>
           </component>
           <grid id="5c519" binding="collectionsPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
@@ -57,6 +61,7 @@
                 <constraints border-constraint="South"/>
                 <properties>
                   <enabled value="true"/>
+                  <focusable value="true"/>
                   <hideActionText value="true"/>
                   <text value=""/>
                 </properties>
@@ -69,21 +74,26 @@
           </grid>
           <component id="67a0f" class="javax.swing.JCheckBox" binding="markFailedProcess">
             <constraints>
-              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Mark the tab of failed run configuration"/>
-              <toolTipText value="Add the icon to the tab with failed run configuration. This allows quickly visually identify the tab with failed applications or tests."/>
+              <text value="&lt;html&gt;Mark the tab of failed run configuration&lt;div style=&quot;font-size:11pt; width: 400px;&quot;&gt;Add the mark icon to the tab with failed run configuration. This allows quickly visually identify the failed application or test.&lt;/div&gt;&lt;/html&gt;"/>
+              <toolTipText value=""/>
+              <verifyInputWhenFocusTarget value="true"/>
+              <verticalAlignment value="1"/>
+              <verticalTextPosition value="1"/>
             </properties>
           </component>
           <component id="45507" class="javax.swing.JCheckBox" binding="hideSuccessProcess">
             <constraints>
-              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <selected value="false"/>
-              <text value="Hide the tab of successfully completed run configuration"/>
-              <toolTipText value="Allows to hide the tabs for the run configurations that completed successfully. Useful for test run configurations, to hide success tests, and leave open only failed tests."/>
+              <text value="&lt;html&gt;Close tab of successfully completed run configuration&lt;div style=&quot;font-size:11pt; width: 400px;&quot;&gt;Allows to close the tab for configuration that has been completed successfully. Useful for situations, where you want to hide success tests and leave open only failed tests.&lt;/div&gt;&lt;/html&gt;"/>
+              <toolTipText value=""/>
+              <verticalAlignment value="1"/>
+              <verticalTextPosition value="1"/>
             </properties>
           </component>
         </children>
