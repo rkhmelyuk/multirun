@@ -10,25 +10,34 @@
         Not only application and test run configurations can be grouped, but other Multirun configurations can be organized
         into single run configuration.</p>
 
-        <p>Usage:</p>
+        <p>Use cases:</p>
         <ul>
             <li>Start batch of tests for multiple modules or applications</li>
             <li>Start multiple applications, like multiple servers or backend + web application</li>
         </ul>
+
+        <p>Usage:</p>
+        <ol>
+            <li>Run -> Edit Configurations...</li>
+            <li>Find and add a new Multirun configuration</li>
+            <li>Add other run configurations to the Multirun configuration</li>
+            <li>Pick options you'd like</li>
+            <li>Ready to use</li>
+        </ol>
 
         ]]>
     </description>
 
     <change-notes>
         <![CDATA[
-        <p>0.4:</p>
+        <p><strong>0.4</strong>:</p>
         <ul>
             <li>Mark the tab for failed process</li>
             <li>Added option to close tabs for successfully completed run configurations</li>
             <li>Better description for configuration options</li>
             <li>Do not re-use the tab of failed run configuration</li>
         </ul>
-        <p>0.3:</p>
+        <p><strong>0.3</strong>:</p>
         <ul>
             <li>Stop running configurations using menu Run -> Stop Multirun or shortcut Ctrl + Shift + K</li>
             <li>Improve Multirun configuration edit form</li>
@@ -37,11 +46,11 @@
             <li>Change in default configuration: tabs re-use is disabled, starting configurations one-by-one is enabled</li>
             <li>Improved plugin description</li>
         </ul>
-        <p>0.2:</p>
+        <p><strong>0.2</strong>:</p>
         <ul>
             <li>Enable Multirun for PyCharm, RubyMine, PhpStorm, WebStorm and AppCode</li>
         </ul>
-        <p>0.1:</p>
+        <p><strong>0.1</strong>:</p>
         <ul>
             <li>Multirun run configuration option to group multiple run configurations and run them in a single click</li>
             <li>Group multiple Multirun configurations in single master Multirun configuration to start everything</li>
