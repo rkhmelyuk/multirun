@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * The action to stop the running multirun configurations.
@@ -23,6 +24,7 @@ public class StopRunningMultirunConfigurationsAction extends AnAction {
     private ConcurrentHashMap<Project, List<ProcessHandler>> processes = new ConcurrentHashMap<Project, List<ProcessHandler>>();
     private AtomicBoolean stopStartingConfigurations = new AtomicBoolean(false);
     private AtomicBoolean multirunRunning = new AtomicBoolean(false);
+    private AtomicInteger startingCounter = new AtomicInteger(0);
 
     @Override public void update(AnActionEvent e) {
         super.update(e);
@@ -93,12 +95,19 @@ public class StopRunningMultirunConfigurationsAction extends AnAction {
         return !stopStartingConfigurations.get();
     }
 
+    // TODO - move to some component
+
     public void beginStaringConfigurations() {
-        multirunRunning.set(true);
-        stopStartingConfigurations.set(false);
+        // already starting...
+        if (startingCounter.getAndIncrement() == 0) {
+            multirunRunning.set(true);
+            stopStartingConfigurations.set(false);
+        }
     }
 
     public void doneStaringConfigurations() {
-        multirunRunning.set(false);
+        if (startingCounter.decrementAndGet() == 0) {
+            multirunRunning.set(false);
+        }
     }
 }

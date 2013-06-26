@@ -59,15 +59,16 @@ public class MultirunRunnerState implements RunnableState {
     public ExecutionResult execute(Executor executor, @NotNull ProgramRunner programRunner) throws ExecutionException {
         stopRunningMultirunConfiguration.beginStaringConfigurations();
         runConfigurations(executor, runConfigurations, 0);
-        stopRunningMultirunConfiguration.doneStaringConfigurations();
         return null;
     }
 
     private void runConfigurations(final Executor executor, final List<RunConfiguration> runConfigurations, final int index) {
-        if (runConfigurations.size() <= index) {
+        if (index >= runConfigurations.size()) {
+            stopRunningMultirunConfiguration.doneStaringConfigurations();
             return;
         }
         if (!stopRunningMultirunConfiguration.canContinueStartingConfigurations()) {
+            stopRunningMultirunConfiguration.doneStaringConfigurations();
             // don't start more configurations if user stopped the plugin work.
             return;
         }
