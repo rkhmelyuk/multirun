@@ -95,6 +95,8 @@ public class MultirunRunnerState implements RunnableState {
                 @SuppressWarnings("ConstantConditions")
                 @Override
                 public void processStarted(final RunContentDescriptor descriptor) {
+                    if (descriptor == null) return;
+
                     final ProcessHandler processHandler = descriptor.getProcessHandler();
                     if (processHandler != null) {
                         processHandler.addProcessListener(new ProcessAdapter() {
@@ -145,6 +147,7 @@ public class MultirunRunnerState implements RunnableState {
                                     @Override
                                     public void run() {
                                         final Content content = descriptor.getAttachedContent();
+                                        if (content == null) return;
 
                                         // exit code is 0 if the process completed successfully
                                         final boolean completedSuccessfully = (terminated && processEvent.getExitCode() == 0);
