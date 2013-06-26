@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>0.4</version>
+    <version>0.5</version>
     <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
     <description>
@@ -30,6 +30,17 @@
 
     <change-notes>
         <![CDATA[
+        <p><strong>0.5</strong>:</p>
+        <ul>
+            <li>
+                Fixed reported and found issues
+                <ul>
+                    <li>NPE during process start</li>
+                    <li>circular reference issue during loading Multirun configurations</li>
+                    <li>killing composite/parallel Multirun configurations</li>
+                </ul>
+            </li>
+        </ul>
         <p><strong>0.4</strong>:</p>
         <ul>
             <li>Mark the tab for failed process</li>
