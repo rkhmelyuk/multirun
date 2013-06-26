@@ -30,18 +30,46 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
     private boolean startOneByOne = true;
     private boolean markFailedProcess = true;
     private boolean hideSuccessProcess = false;
-    private List<RunConfiguration> runConfigurations = new ArrayList<RunConfiguration>();
+    private List<RunConfigurationInternal> runConfigurations = new ArrayList<RunConfigurationInternal>();
 
     public MultirunRunConfiguration(Project project, ConfigurationFactory factory, String name) {
         super(project, factory, name);
     }
 
     public List<RunConfiguration> getRunConfigurations() {
-        return runConfigurations;
+        final List<RunConfiguration> result = new ArrayList<RunConfiguration>();
+        final RunConfiguration[] allConfigurations = RunManager.getInstance(getProject()).getAllConfigurations();
+        for (RunConfigurationInternal runConfiguration: runConfigurations) {
+            for (RunConfiguration configuration : allConfigurations) {
+                if (configuration.getName().equals(runConfiguration.name) &&
+                        configuration.getType().getDisplayName().equals(runConfiguration.type)) {
+                    if (configuration instanceof MultirunRunConfiguration) {
+                        if (configuration.equals(this)) {
+                            // exclude itself
+                            break;
+                        }
+                        if (RunConfigurationHelper.containsLoopies((MultirunRunConfiguration) configuration, this)) {
+                            // disallow adding multirun configuration that causes looping
+                            break;
+                        }
+                    }
+                    result.add(configuration);
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
     public void setRunConfigurations(List<RunConfiguration> runConfigurations) {
-        this.runConfigurations = runConfigurations;
+        this.runConfigurations = new ArrayList<RunConfigurationInternal>();
+        if (runConfigurations == null) {
+            return;
+        }
+
+        for(RunConfiguration configuration: runConfigurations) {
+            this.runConfigurations.add(new RunConfigurationInternal(configuration.getName(), configuration.getType().getDisplayName()));
+        }
     }
 
     public boolean isSeparateTabs() {
@@ -98,7 +126,6 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
             hideSuccessProcess = Boolean.parseBoolean(element.getAttributeValue(PROP_HIDE_SUCCESS_PROCESS));
         }
 
-        final RunConfiguration[] allConfigurations = RunManager.getInstance(getProject()).getAllConfigurations();
         for (Object each : element.getContent()) {
             if (!(each instanceof Element)) {
                 continue;
@@ -107,23 +134,8 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
             if (!eachElement.getName().equals("runConfiguration")) {
                 continue;
             }
-            for (RunConfiguration configuration : allConfigurations) {
-                if (configuration.getName().equals(eachElement.getAttributeValue("name")) &&
-                        configuration.getType().getDisplayName().equals(eachElement.getAttributeValue("type"))) {
-                    if (configuration instanceof MultirunRunConfiguration) {
-                        if (configuration.equals(this)) {
-                            // exclude itself
-                            break;
-                        }
-                        if (RunConfigurationHelper.containsLoopies((MultirunRunConfiguration) configuration, this)) {
-                            // disallow adding multirun configuration that causes looping
-                            break;
-                        }
-                    }
-                    runConfigurations.add(configuration);
-                    break;
-                }
-            }
+            runConfigurations.add(new RunConfigurationInternal(eachElement.getAttributeValue("name"),
+                                                               eachElement.getAttributeValue("type")));
         }
     }
 
@@ -137,10 +149,10 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
         element.setAttribute(PROP_HIDE_SUCCESS_PROCESS, String.valueOf(hideSuccessProcess));
 
         final List<Element> configurations = new ArrayList<Element>();
-        for (RunConfiguration each : runConfigurations) {
+        for (RunConfigurationInternal each : runConfigurations) {
             Element runConfiguration = new Element("runConfiguration");
-            runConfiguration.setAttribute("name", each.getName());
-            runConfiguration.setAttribute("type", each.getType().getDisplayName());
+            runConfiguration.setAttribute("name", each.name);
+            runConfiguration.setAttribute("type", each.type);
             configurations.add(runConfiguration);
         }
         element.setContent(configurations);
@@ -161,13 +173,26 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
     @Nullable
     @Override
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment executionEnvironment) throws ExecutionException {
-        return new MultirunRunnerState(runConfigurations, startOneByOne, separateTabs, markFailedProcess, hideSuccessProcess);
+        return new MultirunRunnerState(getRunConfigurations(), startOneByOne, separateTabs, markFailedProcess, hideSuccessProcess);
     }
 
     @Override
     public void checkConfiguration() throws RuntimeConfigurationException {
         if (runConfigurations.isEmpty()) {
             throw new RuntimeConfigurationError("No run configuration chosen");
+        }
+    }
+
+    private static class RunConfigurationInternal {
+        String name;
+        String type;
+
+        RunConfigurationInternal() {
+        }
+
+        RunConfigurationInternal(String name, String type) {
+            this.name = name;
+            this.type = type;
         }
     }
 }
