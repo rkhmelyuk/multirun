@@ -1,6 +1,7 @@
 package com.khmelyuk.multirun;
 
 import com.intellij.execution.configurations.RunProfile;
+import com.intellij.execution.executors.DefaultDebugExecutor;
 import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.runners.DefaultProgramRunner;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +21,8 @@ public class MultirunRunner extends DefaultProgramRunner {
 
     @Override
     public boolean canRun(@NotNull String executorId, @NotNull RunProfile runProfile) {
-        return DefaultRunExecutor.EXECUTOR_ID.equals(executorId) && runProfile instanceof MultirunRunConfiguration;
+        return runProfile instanceof MultirunRunConfiguration &&
+                (DefaultRunExecutor.EXECUTOR_ID.equals(executorId)
+                        || DefaultDebugExecutor.EXECUTOR_ID.equals(executorId));
     }
 }
