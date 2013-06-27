@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>0.5</version>
+    <version>0.6</version>
     <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
     <description>
@@ -30,6 +30,11 @@
 
     <change-notes>
         <![CDATA[
+        <p><strong>0.6</strong>:</p>
+        <ul>
+            <li>Enabled Debug for Multirun configuration</li>
+            <li>Fix issue with starting composite Multirun configuration</li>
+        </ul>
         <p><strong>0.5</strong>:</p>
         <ul>
             <li>
