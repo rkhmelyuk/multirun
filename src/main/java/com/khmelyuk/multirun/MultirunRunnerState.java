@@ -33,6 +33,7 @@ import java.util.List;
 /** @author Ruslan Khmelyuk */
 public class MultirunRunnerState implements RunnableState {
 
+    private String name;
     private boolean separateTabs;
     private boolean startOneByOne;
     private boolean markFailedProcess;
@@ -40,10 +41,12 @@ public class MultirunRunnerState implements RunnableState {
     private List<RunConfiguration> runConfigurations;
     private StopRunningMultirunConfigurationsAction stopRunningMultirunConfiguration;
 
-    public MultirunRunnerState(List<RunConfiguration> runConfigurations,
+    public MultirunRunnerState(String name,
+                               List<RunConfiguration> runConfigurations,
                                boolean startOneByOne, boolean separateTabs,
                                boolean markFailedProcess, boolean hideSuccessProcess) {
 
+        this.name = name;
         this.separateTabs = separateTabs;
         this.startOneByOne = startOneByOne;
         this.runConfigurations = runConfigurations;
@@ -96,7 +99,13 @@ public class MultirunRunnerState implements RunnableState {
                 @SuppressWarnings("ConstantConditions")
                 @Override
                 public void processStarted(final RunContentDescriptor descriptor) {
-                    if (descriptor == null) return;
+                    if (descriptor == null) {
+                        if (startOneByOne) {
+                            // start next configuration..
+                            runConfigurations(executor, runConfigurations, index + 1);
+                        }
+                        return;
+                    }
 
                     final ProcessHandler processHandler = descriptor.getProcessHandler();
                     if (processHandler != null) {

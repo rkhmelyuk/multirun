@@ -23,7 +23,6 @@ public class StopRunningMultirunConfigurationsAction extends AnAction {
 
     private ConcurrentHashMap<Project, List<ProcessHandler>> processes = new ConcurrentHashMap<Project, List<ProcessHandler>>();
     private AtomicBoolean stopStartingConfigurations = new AtomicBoolean(false);
-    private AtomicBoolean multirunRunning = new AtomicBoolean(false);
     private AtomicInteger startingCounter = new AtomicInteger(0);
 
     @Override public void update(AnActionEvent e) {
@@ -32,7 +31,7 @@ public class StopRunningMultirunConfigurationsAction extends AnAction {
 
         final Presentation presentation = e.getPresentation();
         final List<ProcessHandler> processes = this.processes.get(e.getProject());
-        presentation.setEnabled(multirunRunning.get() || hasNonTerminatedProcesses(processes));
+        presentation.setEnabled(startingCounter.get() > 0 || hasNonTerminatedProcesses(processes));
     }
 
     private boolean hasNonTerminatedProcesses(List<ProcessHandler> processes) {
@@ -98,16 +97,12 @@ public class StopRunningMultirunConfigurationsAction extends AnAction {
     // TODO - move to some component
 
     public void beginStaringConfigurations() {
-        // already starting...
-        if (startingCounter.getAndIncrement() == 0) {
-            multirunRunning.set(true);
+        if (startingCounter.incrementAndGet() == 1) {
             stopStartingConfigurations.set(false);
         }
     }
 
     public void doneStaringConfigurations() {
-        if (startingCounter.decrementAndGet() == 0) {
-            multirunRunning.set(false);
-        }
+        startingCounter.decrementAndGet();
     }
 }

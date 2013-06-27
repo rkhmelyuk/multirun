@@ -173,7 +173,7 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
     @Nullable
     @Override
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment executionEnvironment) throws ExecutionException {
-        return new MultirunRunnerState(getRunConfigurations(), startOneByOne, separateTabs, markFailedProcess, hideSuccessProcess);
+        return new MultirunRunnerState(getName(), getRunConfigurations(), startOneByOne, separateTabs, markFailedProcess, hideSuccessProcess);
     }
 
     @Override
