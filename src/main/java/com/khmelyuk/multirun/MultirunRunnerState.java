@@ -9,7 +9,6 @@ import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.runners.ExecutionEnvironmentBuilder;
 import com.intellij.execution.runners.ExecutionUtil;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.RunContentDescriptor;
@@ -89,11 +88,9 @@ public class MultirunRunnerState implements RunnableState {
 
             runTriggers(executor, configuration);
             RunContentDescriptor runContentDescriptor = getRunContentDescriptor(runConfiguration, project);
-            ExecutionEnvironment executionEnvironment = new ExecutionEnvironmentBuilder()
-                    .setRunnerAndSettings(runner, configuration)
-                    .setRunProfile(runConfiguration)
-                    .setContentToReuse(runContentDescriptor)
-                    .setProject(project).build();
+            ExecutionEnvironment executionEnvironment = new ExecutionEnvironment(
+                    runner, DefaultExecutionTarget.INSTANCE,
+                    configuration, runContentDescriptor, project);
 
             runner.execute(executor, executionEnvironment, new ProgramRunner.Callback() {
                 @SuppressWarnings("ConstantConditions")
