@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>0.6</version>
+    <version>0.6.1</version>
     <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
     <description>
@@ -25,11 +25,21 @@
             <li>Ready to use</li>
         </ol>
 
+        Multirun + Before Launch Tasks gives even more functionality: read more at http://goo.gl/KwHvx
+
         ]]>
     </description>
 
     <change-notes>
         <![CDATA[
+        <p><strong>0.7</strong>:</p>
+        <ul>
+            <li>Enable Run Another Configuration option for Before Launch tasks if not enabled yet</li>
+        </ul>
+        <p><strong>0.6.1</strong>:</p>
+        <ul>
+            <li>Fix API issue when using Multirun in IDEA 12.0.x</li>
+        </ul>
         <p><strong>0.6</strong>:</p>
         <ul>
             <li>Enabled Debug for Multirun configuration</li>
@@ -91,6 +101,9 @@
     </application-components>
 
     <project-components>
+        <component>
+            <implementation-class>com.khmelyuk.multirun.RegisterRunConfigurationBeforeProvider</implementation-class>
+        </component>
     </project-components>
 
     <actions>
