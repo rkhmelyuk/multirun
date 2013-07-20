@@ -9,12 +9,11 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unchecked")
 public class RegisterRunConfigurationBeforeProvider implements ProjectComponent {
-    private Project project;
+    private final Project project;
     private BeforeRunTaskProvider beforeRunProvider;
 
     public RegisterRunConfigurationBeforeProvider(Project project) {
         this.project = project;
-        this.beforeRunProvider = new RunConfigurationBeforeRunProvider(project);
     }
 
     public void initComponent() {
@@ -26,12 +25,15 @@ public class RegisterRunConfigurationBeforeProvider implements ProjectComponent 
         }
 
         // register the provider
+        this.beforeRunProvider = new RunConfigurationBeforeRunProvider(project);
         Extensions.getArea(project).getExtensionPoint(BeforeRunTaskProvider.EXTENSION_POINT_NAME).registerExtension(beforeRunProvider);
     }
 
     public void disposeComponent() {
-        // unregister the provider
-        Extensions.getArea(project).getExtensionPoint(BeforeRunTaskProvider.EXTENSION_POINT_NAME).unregisterExtension(beforeRunProvider);
+        if (beforeRunProvider != null) {
+            // unregister the provider
+            Extensions.getArea(project).getExtensionPoint(BeforeRunTaskProvider.EXTENSION_POINT_NAME).unregisterExtension(beforeRunProvider);
+        }
     }
 
     @NotNull
