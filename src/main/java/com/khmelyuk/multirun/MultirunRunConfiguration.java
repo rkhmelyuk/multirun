@@ -9,7 +9,6 @@ import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.WriteExternalException;
 import com.khmelyuk.multirun.ui.MultirunRunConfigurationEditor;
 import org.jdom.Element;
@@ -160,13 +159,13 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
 
     @Nullable
     @Override
-    public JDOMExternalizable createRunnerSettings(ConfigurationInfoProvider configurationInfoProvider) {
+    public ConfigurationPerRunnerSettings createRunnerSettings( ConfigurationInfoProvider configurationInfoProvider ) {
         return null;
     }
 
     @Nullable
     @Override
-    public SettingsEditor<JDOMExternalizable> getRunnerSettingsEditor(ProgramRunner programRunner) {
+    public SettingsEditor<ConfigurationPerRunnerSettings> getRunnerSettingsEditor( ProgramRunner programRunner ) {
         return null;
     }
 
