@@ -88,11 +88,12 @@ public class MultirunRunnerState implements RunnableState {
 
             runTriggers(executor, configuration);
             RunContentDescriptor runContentDescriptor = getRunContentDescriptor(runConfiguration, project);
-            ExecutionEnvironment executionEnvironment = new ExecutionEnvironment(
-                    runner, DefaultExecutionTarget.INSTANCE,
-                    configuration, runContentDescriptor, project);
+            ExecutionEnvironment executionEnvironment = new ExecutionEnvironment( configuration.getConfiguration(),
+	                  executor, DefaultExecutionTarget.INSTANCE, project, configuration.getRunnerSettings( runner ),
+	                  configuration.getConfigurationSettings( runner ), runContentDescriptor, configuration,
+	                  runner.getRunnerId() );
 
-            runner.execute(executor, executionEnvironment, new ProgramRunner.Callback() {
+            runner.execute(executionEnvironment, new ProgramRunner.Callback() {
                 @SuppressWarnings("ConstantConditions")
                 @Override
                 public void processStarted(final RunContentDescriptor descriptor) {
@@ -263,13 +264,4 @@ public class MultirunRunnerState implements RunnableState {
         return !runContentDescriptors.isEmpty() ? runContentDescriptors.get(0) : null;
     }
 
-    @Override
-    public RunnerSettings getRunnerSettings() {
-        return null;
-    }
-
-    @Override
-    public ConfigurationPerRunnerSettings getConfigurationSettings() {
-        return null;
-    }
 }
