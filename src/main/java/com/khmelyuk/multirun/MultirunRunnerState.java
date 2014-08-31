@@ -1,7 +1,9 @@
 package com.khmelyuk.multirun;
 
 import com.intellij.execution.*;
-import com.intellij.execution.configurations.*;
+import com.intellij.execution.configurations.ConfigurationType;
+import com.intellij.execution.configurations.RunConfiguration;
+import com.intellij.execution.configurations.RunnableState;
 import com.intellij.execution.impl.RunDialog;
 import com.intellij.execution.impl.RunManagerImpl;
 import com.intellij.execution.impl.RunnerAndConfigurationSettingsImpl;
@@ -23,7 +25,6 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.LayeredIcon;
 import com.intellij.ui.content.Content;
-import com.intellij.util.NotNullFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -87,12 +88,11 @@ public class MultirunRunnerState implements RunnableState {
             if (!checkRunConfiguration(executor, project, configuration)) return;
 
             runTriggers(executor, configuration);
-            RunContentDescriptor runContentDescriptor = getRunContentDescriptor(runConfiguration, project);
             ExecutionEnvironment executionEnvironment = new ExecutionEnvironment(
-                    runner, DefaultExecutionTarget.INSTANCE,
-                    configuration, runContentDescriptor, project);
+                    executor, runner, DefaultExecutionTarget.INSTANCE,
+                    configuration, project);
 
-            runner.execute(executor, executionEnvironment, new ProgramRunner.Callback() {
+            runner.execute(executionEnvironment, new ProgramRunner.Callback() {
                 @SuppressWarnings("ConstantConditions")
                 @Override
                 public void processStarted(final RunContentDescriptor descriptor) {
@@ -247,29 +247,5 @@ public class MultirunRunnerState implements RunnableState {
             }
         }
         return true;
-    }
-
-    private RunContentDescriptor getRunContentDescriptor(final RunConfiguration runConfiguration, Project project) {
-        List<RunContentDescriptor> runContentDescriptors = ExecutionHelper.collectConsolesByDisplayName(
-                project,
-                new NotNullFunction<String, Boolean>() {
-                    @NotNull
-                    @Override
-                    public Boolean fun(String name) {
-                        return runConfiguration.getName().equals(name);
-                    }
-                });
-
-        return !runContentDescriptors.isEmpty() ? runContentDescriptors.get(0) : null;
-    }
-
-    @Override
-    public RunnerSettings getRunnerSettings() {
-        return null;
-    }
-
-    @Override
-    public ConfigurationPerRunnerSettings getConfigurationSettings() {
-        return null;
     }
 }
