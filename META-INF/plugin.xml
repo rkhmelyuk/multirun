@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>0.8</version>
+    <version>0.9</version>
     <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
     <description>
@@ -34,9 +34,8 @@
         <![CDATA[
         <p><strong>0.9</strong>:</p>
         <ul>
-            <li>Fixed API issues with using Multirun from IntellijIDEA 14.</li>
+            <li>Fixed API issues with using Multirun from IntellijIDEA 14 (thanks derkork!)</li>
         </ul>
-
         <p><strong>0.8</strong>:</p>
         <ul>
             <li>Fixed API issues with using Multirun from IntellijIDEA 13 (thanks jgindin!)</li>
