@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>0.8</version>
+    <version>0.9</version>
     <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
     <description>
@@ -32,6 +32,12 @@
 
     <change-notes>
         <![CDATA[
+        <p><strong>0.9</strong>:</p>
+        <ul>
+            <li>Fixed API issues with using Multirun from IntellijIDEA 14 (thanks derkork!)</li>
+            <li>Change shortcut to kill Multirun to Shift + Alt + K to avoid conflict with Git plugin</li>
+            <li>Delay can be added before starting configurations in one-by-one mode</li>
+        </ul>
         <p><strong>0.8</strong>:</p>
         <ul>
             <li>Fixed API issues with using Multirun from IntellijIDEA 13 (thanks jgindin!)</li>
@@ -115,7 +121,7 @@
         <action id="stopRunningMultirunConfiguration" class="com.khmelyuk.multirun.StopRunningMultirunConfigurationsAction"
                 text="Stop Multirun" description="Stop Running Multirun Configurations" icon="/actions/suspend.png">
             <add-to-group group-id="RunMenu" relative-to-action="Stop" anchor="after"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl K"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="shift alt K"/>
         </action>
     </actions>
 

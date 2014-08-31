@@ -24,7 +24,9 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
     public static final String PROP_START_ONE_BY_ONE = "startOneByOne";
     public static final String PROP_MARK_FAILED_PROCESS = "markFailedProcess";
     public static final String PROP_HIDE_SUCCESS_PROCESS = "hideSuccessProcess";
+    public static final String PROP_DELAY_TIME = "delayTime";
 
+    private int delayTime = 0;
     private boolean separateTabs = true;
     private boolean startOneByOne = true;
     private boolean markFailedProcess = true;
@@ -103,6 +105,14 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
         this.hideSuccessProcess = hideSuccessProcess;
     }
 
+    public int getDelayTime() {
+        return delayTime;
+    }
+
+    public void setDelayTime(int delayTime) {
+        this.delayTime = delayTime;
+    }
+
     @Override
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
         return new MultirunRunConfigurationEditor(getProject());
@@ -123,6 +133,9 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
         }
         if (element.getAttributeValue(PROP_HIDE_SUCCESS_PROCESS) != null) {
             hideSuccessProcess = Boolean.parseBoolean(element.getAttributeValue(PROP_HIDE_SUCCESS_PROCESS));
+        }
+        if (element.getAttributeValue(PROP_DELAY_TIME) != null) {
+            delayTime = Integer.parseInt(element.getAttributeValue(PROP_DELAY_TIME));
         }
 
         for (Object each : element.getContent()) {
@@ -146,6 +159,7 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
         element.setAttribute(PROP_START_ONE_BY_ONE, String.valueOf(startOneByOne));
         element.setAttribute(PROP_MARK_FAILED_PROCESS, String.valueOf(markFailedProcess));
         element.setAttribute(PROP_HIDE_SUCCESS_PROCESS, String.valueOf(hideSuccessProcess));
+        element.setAttribute(PROP_DELAY_TIME, String.valueOf(delayTime));
 
         final List<Element> configurations = new ArrayList<Element>();
         for (RunConfigurationInternal each : runConfigurations) {
@@ -172,7 +186,7 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
     @Nullable
     @Override
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment executionEnvironment) throws ExecutionException {
-        return new MultirunRunnerState(getName(), getRunConfigurations(), startOneByOne, separateTabs, markFailedProcess, hideSuccessProcess);
+        return new MultirunRunnerState(getRunConfigurations(), startOneByOne, delayTime, separateTabs, markFailedProcess, hideSuccessProcess);
     }
 
     @Override
