@@ -35,6 +35,8 @@
         <p><strong>0.9</strong>:</p>
         <ul>
             <li>Fixed API issues with using Multirun from IntellijIDEA 14 (thanks derkork!)</li>
+            <li>Change shortcut to kill Multirun to Shift + Alt + K to avoid conflict with Git plugin</li>
+            <li>Delay can be added before starting configurations in one-by-one mode</li>
         </ul>
         <p><strong>0.8</strong>:</p>
         <ul>

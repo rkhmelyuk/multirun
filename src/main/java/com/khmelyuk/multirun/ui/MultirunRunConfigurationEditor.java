@@ -38,6 +38,7 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
     private JCheckBox markFailedProcess;
     private JCheckBox hideSuccessProcess;
     private JCheckBox configurationsListChanged;
+    private JTextField delayTime;
     private MultirunRunConfiguration configuration;
 
     public MultirunRunConfigurationEditor(final Project project) {
@@ -73,6 +74,7 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
         });
         configurations.setCellRenderer(new RunConfigurationListCellRenderer());
 
+        delayTime.setText(String.valueOf(multirunRunConfiguration.getDelayTime()));
         reuseTabs.setSelected(!multirunRunConfiguration.isSeparateTabs());
         startOneByOne.setSelected(multirunRunConfiguration.isStartOneByOne());
         markFailedProcess.setSelected(multirunRunConfiguration.isMarkFailedProcess());
@@ -85,6 +87,15 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
         multirunRunConfiguration.setStartOneByOne(startOneByOne.isSelected());
         multirunRunConfiguration.setMarkFailedProcess(markFailedProcess.isSelected());
         multirunRunConfiguration.setHideSuccessProcess(hideSuccessProcess.isSelected());
+        int delayTimeSeconds = 0;
+        if (delayTime.getText() != null && !delayTime.getText().isEmpty()) {
+            try {
+                delayTimeSeconds = Integer.parseInt(delayTime.getText());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        multirunRunConfiguration.setDelayTime(delayTimeSeconds);
 
         RunConfiguration[] buffer = new RunConfiguration[configurations.getModel().getSize()];
         ((DefaultListModel) configurations.getModel()).copyInto(buffer);

@@ -19,7 +19,11 @@ import com.intellij.internal.statistic.UsageTrigger;
 import com.intellij.internal.statistic.beans.ConvertUsagesUtil;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.impl.ActionManagerImpl;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.impl.LaterInvocator;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.text.StringUtil;
@@ -33,7 +37,7 @@ import java.util.List;
 /** @author Ruslan Khmelyuk */
 public class MultirunRunnerState implements RunnableState {
 
-    private String name;
+    private int delayTime;
     private boolean separateTabs;
     private boolean startOneByOne;
     private boolean markFailedProcess;
@@ -41,12 +45,11 @@ public class MultirunRunnerState implements RunnableState {
     private List<RunConfiguration> runConfigurations;
     private StopRunningMultirunConfigurationsAction stopRunningMultirunConfiguration;
 
-    public MultirunRunnerState(String name,
-                               List<RunConfiguration> runConfigurations,
-                               boolean startOneByOne, boolean separateTabs,
+    public MultirunRunnerState(List<RunConfiguration> runConfigurations,
+                               boolean startOneByOne, int delayTime, boolean separateTabs,
                                boolean markFailedProcess, boolean hideSuccessProcess) {
 
-        this.name = name;
+        this.delayTime = delayTime;
         this.separateTabs = separateTabs;
         this.startOneByOne = startOneByOne;
         this.runConfigurations = runConfigurations;
@@ -194,7 +197,34 @@ public class MultirunRunnerState implements RunnableState {
 
                     if (startOneByOne) {
                         // start next configuration..
-                        runConfigurations(executor, runConfigurations, index + 1);
+
+                        if (delayTime > 0) {
+                            final long start = System.currentTimeMillis();
+                            ProgressManager.getInstance().run(new Task.Backgroundable(project, "Waiting for delay") {
+                                @Override
+                                public void run(@NotNull ProgressIndicator progressIndicator) {
+                                    try {
+                                        while (System.currentTimeMillis() - start < delayTime * 1000) {
+                                            if (progressIndicator.isCanceled()) {
+                                                return;
+                                            }
+                                            final long passed = (System.currentTimeMillis() - start) / 1000;
+                                            final String seconds = (delayTime - passed == 1)  ? "second" : "seconds";
+                                            progressIndicator.setFraction((double) passed / delayTime);
+                                            progressIndicator.setText("waiting " + (delayTime - passed) + " " + seconds);
+                                            Thread.sleep(1000);
+                                        }
+                                    } catch (InterruptedException ignored) {
+                                        return;
+                                    }
+                                    ApplicationManager.getApplication().runReadAction(new Runnable() {
+                                        public void run() { runConfigurations(executor, runConfigurations, index + 1); }
+                                    });
+                                }
+                            });
+                        } else {
+                            runConfigurations(executor, runConfigurations, index + 1);
+                        }
                     }
                 }
             });
