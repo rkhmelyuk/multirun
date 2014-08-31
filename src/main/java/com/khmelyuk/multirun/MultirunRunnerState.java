@@ -19,7 +19,6 @@ import com.intellij.internal.statistic.UsageTrigger;
 import com.intellij.internal.statistic.beans.ConvertUsagesUtil;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.impl.ActionManagerImpl;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.impl.LaterInvocator;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
@@ -217,7 +216,7 @@ public class MultirunRunnerState implements RunnableState {
                                     } catch (InterruptedException ignored) {
                                         return;
                                     }
-                                    ApplicationManager.getApplication().runReadAction(new Runnable() {
+                                    LaterInvocator.invokeLater(new Runnable() {
                                         public void run() { runConfigurations(executor, runConfigurations, index + 1); }
                                     });
                                 }
