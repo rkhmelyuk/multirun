@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>0.9</version>
+    <version>0.9.1</version>
     <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
     <description>
@@ -32,6 +32,10 @@
 
     <change-notes>
         <![CDATA[
+        <p><strong>0.9.1</strong>:</p>
+        <ul>
+            <li>Adding JRebel support</li>
+        </ul>
         <p><strong>0.9</strong>:</p>
         <ul>
             <li>Fixed API issues with using Multirun from IntellijIDEA 14 (thanks derkork!)</li>
