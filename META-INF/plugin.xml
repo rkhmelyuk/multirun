@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>0.9.2</version>
+    <version>1.0</version>
     <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
     <description>
@@ -32,6 +32,12 @@
 
     <change-notes>
         <![CDATA[
+        <p><strong>1.0</strong>:</p>
+        <ul>
+            <li>It works stable for almost 2 years for me. So I feel free to say it's 1.0 version. Woohoo!!</li>
+            <li>Fixed API issues with using Multirun from IntellijIDEA 14.1</li>
+            <li>Change shortcut to kill Multirun to Control + Alt + K on OS X</li>
+        </ul>
         <p><strong>0.9</strong>:</p>
         <ul>
             <li>Fixed API issues with using Multirun from IntellijIDEA 14 (thanks derkork!)</li>
@@ -101,7 +107,7 @@
     </change-notes>
 
     <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
-    <idea-version since-build="130.0000" until-build="137.9999"/>
+    <idea-version since-build="141.0000" until-build="141.9999"/>
 
     <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
          on how to target different products -->
@@ -122,6 +128,7 @@
                 text="Stop Multirun" description="Stop Running Multirun Configurations" icon="/actions/suspend.png">
             <add-to-group group-id="RunMenu" relative-to-action="Stop" anchor="after"/>
             <keyboard-shortcut keymap="$default" first-keystroke="shift alt K"/>
+            <keyboard-shortcut keymap="Mac OS X" first-keystroke="control alt K"/>
         </action>
     </actions>
 
