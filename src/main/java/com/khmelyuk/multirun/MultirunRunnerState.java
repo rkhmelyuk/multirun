@@ -19,7 +19,7 @@ import com.intellij.internal.statistic.UsageTrigger;
 import com.intellij.internal.statistic.beans.ConvertUsagesUtil;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.impl.ActionManagerImpl;
-import com.intellij.openapi.application.impl.LaterInvocator;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
@@ -86,16 +86,12 @@ public class MultirunRunnerState implements RunnableState {
 
         boolean started = false;
         try {
-            ProgramRunner runner = RunnerRegistry.getInstance().getRunner(executor.getId(), runConfiguration);
+            final ProgramRunner runner = RunnerRegistry.getInstance().getRunner(executor.getId(), runConfiguration);
             if (runner == null) return;
             if (!checkRunConfiguration(executor, project, configuration)) return;
 
             runTriggers(executor, configuration);
-            RunContentDescriptor runContentDescriptor = getRunContentDescriptor(runConfiguration, project);
-            ExecutionEnvironment executionEnvironment = new ExecutionEnvironment( configuration.getConfiguration(),
-	                  executor, DefaultExecutionTarget.INSTANCE, project, configuration.getRunnerSettings( runner ),
-	                  configuration.getConfigurationSettings( runner ), runContentDescriptor, configuration,
-	                  runner.getRunnerId() );
+            ExecutionEnvironment executionEnvironment = new ExecutionEnvironment(executor, runner, configuration, project);
 
             runner.execute(executionEnvironment, new ProgramRunner.Callback() {
                 @SuppressWarnings("ConstantConditions")
@@ -155,7 +151,7 @@ public class MultirunRunnerState implements RunnableState {
                                     return;
                                 }
 
-                                LaterInvocator.invokeLater(new Runnable() {
+                                ApplicationManager.getApplication().invokeLater(new Runnable() {
                                     @Override
                                     public void run() {
                                         final Content content = descriptor.getAttachedContent();
@@ -183,7 +179,7 @@ public class MultirunRunnerState implements RunnableState {
 
                                         // add the alert icon in case if process existed with non-0 status
                                         if (markFailedProcess && processEvent.getExitCode() != 0) {
-                                            LaterInvocator.invokeLater(new Runnable() {
+                                            ApplicationManager.getApplication().invokeLater(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     content.setIcon(LayeredIcon.create(content.getIcon(), AllIcons.Nodes.TabAlert));
@@ -219,8 +215,10 @@ public class MultirunRunnerState implements RunnableState {
                                     } catch (InterruptedException ignored) {
                                         return;
                                     }
-                                    LaterInvocator.invokeLater(new Runnable() {
-                                        public void run() { runConfigurations(executor, runConfigurations, index + 1); }
+                                    ApplicationManager.getApplication().invokeLater(new Runnable() {
+                                        public void run() {
+                                            runConfigurations(executor, runConfigurations, index + 1);
+                                        }
                                     });
                                 }
                             });
