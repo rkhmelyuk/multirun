@@ -1,7 +1,8 @@
 <idea-plugin version="2">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>1.0.1</version>
+    <version>1.1</version>
+    <version>1.1</version>
     <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
     <description>
@@ -32,6 +33,10 @@
 
     <change-notes>
         <![CDATA[
+        <p><strong>1.1</strong>:</p>
+        <ul>
+            <li>Support for IntellijIDEA 15</li>
+        </ul>
         <p><strong>1.0.1</strong>:</p>
         <ul>
             <li>Adding support for JRebel run configurations (thanks olmoser!)</li>
@@ -111,7 +116,7 @@
     </change-notes>
 
     <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
-    <idea-version since-build="138.0000" until-build="141.9999"/>
+    <idea-version since-build="142.0000" until-build="142.9999"/>
 
     <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
          on how to target different products -->
