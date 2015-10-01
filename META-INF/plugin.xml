@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
     <description>
@@ -32,6 +32,10 @@
 
     <change-notes>
         <![CDATA[
+        <p><strong>1.0.1</strong>:</p>
+        <ul>
+            <li>Adding support for JRebel run configurations (thanks olmoser!)</li>
+        </ul>
         <p><strong>1.0</strong>:</p>
         <ul>
             <li>It works stable for almost 2 years for me. So I feel free to say it's 1.0 version. Woohoo!!</li>
