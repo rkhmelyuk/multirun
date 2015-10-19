@@ -25,8 +25,8 @@ public class MultirunRunner extends DefaultProgramRunner {
     @Override
     public boolean canRun(@NotNull String executorId, @NotNull RunProfile runProfile) {
         return runProfile instanceof MultirunRunConfiguration &&
-                (DefaultRunExecutor.EXECUTOR_ID.equals(executorId)
-                        || DefaultDebugExecutor.EXECUTOR_ID.equals(executorId)
+                (DefaultRunExecutor.EXECUTOR_ID.equalsIgnoreCase(executorId)
+                        || DefaultDebugExecutor.EXECUTOR_ID.equalsIgnoreCase(executorId)
                         || JREBEL_EXECUTOR_ID.equalsIgnoreCase(executorId)
                         || JREBEL_DEBUG_ID.equalsIgnoreCase(executorId));
     }
