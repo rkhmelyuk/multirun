@@ -1,9 +1,9 @@
-.idea
+#.idea
 test/test-prj
 *.jar
 *.iml
 *.ipr
 *.iws
-target
-bin
-out
+.gradle
+build
+!gradle/wrapper/gradle-wrapper.jar
