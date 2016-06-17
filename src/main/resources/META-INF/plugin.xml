@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>1.1.3</version>
+    <version>1.1.4</version>
     <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
     <description>
@@ -32,6 +32,10 @@
 
     <change-notes>
         <![CDATA[
+        <p><strong>1.4</strong>:</p>
+        <ul>
+            <li>Support for IntellijIDEA 2016.2 EAP</li>
+        </ul>
         <p><strong>1.3</strong>:</p>
         <ul>
             <li>Support for IntellijIDEA 16</li>
