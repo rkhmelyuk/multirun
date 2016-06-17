@@ -1,4 +1,3 @@
-#.idea
 test/test-prj
 *.jar
 *.iml
@@ -7,3 +6,4 @@ test/test-prj
 .gradle
 build
 !gradle/wrapper/gradle-wrapper.jar
+.idea/
