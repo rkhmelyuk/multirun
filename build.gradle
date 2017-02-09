@@ -5,13 +5,17 @@ buildscript {
 }
 
 plugins {
-    id "org.jetbrains.intellij" version "0.1.10"
+    id "org.jetbrains.intellij" version "0.2.1"
 }
 
 apply plugin: 'org.jetbrains.intellij'
 
 intellij {
     pluginName = 'multirun'
+    publishPlugin {
+        username System.getProperty('jetbrains.plugin.username')
+        password System.getProperty('jetbrains.plugin.password')
+    }
 }
 
 task wrapper(type: Wrapper) {
