@@ -1,11 +1,5 @@
-buildscript {
-    repositories {
-        maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
-    }
-}
-
 plugins {
-    id "org.jetbrains.intellij" version "0.3.1"
+    id "org.jetbrains.intellij" version "0.4.7"
 }
 
 intellij {
@@ -13,11 +7,13 @@ intellij {
     updateSinceUntilBuild = false
 }
 
-publishPlugin {
-    "username" findProperty("username")
-    "password" findProperty("password")
+// Load the plugin repo api key from local.properties file
+Properties properties = new Properties()
+def propertiesFile = project.rootProject.file('local.properties')
+if (propertiesFile.exists()) {
+    properties.load(propertiesFile.newDataInputStream())
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.14'
+publishPlugin {
+    token properties.getProperty('hub.token')
 }

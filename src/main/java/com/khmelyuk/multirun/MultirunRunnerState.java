@@ -1,7 +1,6 @@
 package com.khmelyuk.multirun;
 
 import com.intellij.execution.*;
-import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.execution.configurations.RunnableState;
 import com.intellij.execution.impl.RunDialog;
@@ -15,8 +14,6 @@ import com.intellij.execution.runners.ExecutionUtil;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.icons.AllIcons;
-import com.intellij.internal.statistic.UsageTrigger;
-import com.intellij.internal.statistic.beans.ConvertUsagesUtil;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.impl.ActionManagerImpl;
 import com.intellij.openapi.application.ApplicationManager;
@@ -90,7 +87,6 @@ public class MultirunRunnerState implements RunnableState {
             if (runner == null) return;
             if (!checkRunConfiguration(executor, project, configuration)) return;
 
-            runTriggers(executor, configuration);
             ExecutionEnvironment executionEnvironment = new ExecutionEnvironment(executor, runner, configuration, project);
 
             runner.execute(executionEnvironment, new ProgramRunner.Callback() {
@@ -239,13 +235,6 @@ public class MultirunRunnerState implements RunnableState {
                 // failed to start current, means the chain is broken
                 runConfigurations(executor, runConfigurations, index + 1);
             }
-        }
-    }
-
-    private void runTriggers(Executor executor, RunnerAndConfigurationSettings configuration) {
-        final ConfigurationType configurationType = configuration.getType();
-        if (configurationType != null) {
-            UsageTrigger.trigger("execute." + ConvertUsagesUtil.ensureProperKey(configurationType.getId()) + "." + executor.getId());
         }
     }
 

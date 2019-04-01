@@ -1,7 +1,7 @@
-<idea-plugin version="2">
+<idea-plugin url="https://plugins.jetbrains.com/plugin/7248-multirun">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>1.9</version>
+    <version>1.10</version>
     <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
     <description>
@@ -32,6 +32,10 @@
 
     <change-notes>
         <![CDATA[
+        <p><strong>1.10</strong>:</p>
+        <ul>
+            <li>Update gradle-intellij-plugin and add support for IntellijIDEA 2019.1</li>
+        </ul>
         <p><strong>1.9</strong>:</p>
         <ul>
             <li>Support for IntellijIDEA 2018.1</li>
@@ -142,10 +146,10 @@
         ]]>
     </change-notes>
 
-    <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
-    <idea-version since-build="181.0000"/>
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="191.0000"/>
 
-    <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.lang</depends>
 

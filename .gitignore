@@ -4,6 +4,8 @@ test/test-prj
 *.ipr
 *.iws
 .gradle
+local.properties
 build
+out
 !gradle/wrapper/gradle-wrapper.jar
 .idea/
