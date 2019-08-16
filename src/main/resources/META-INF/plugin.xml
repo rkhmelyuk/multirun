@@ -1,7 +1,7 @@
 <idea-plugin url="https://plugins.jetbrains.com/plugin/7248-multirun">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>1.10</version>
+    <version>1.11</version>
     <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
     <description>
@@ -32,6 +32,10 @@
 
     <change-notes>
         <![CDATA[
+        <p><strong>1.11</strong>:</p>
+        <ul>
+            <li>Update gradle-intellij-plugin and add support for IntellijIDEA 2019.2</li>
+        </ul>
         <p><strong>1.10</strong>:</p>
         <ul>
             <li>Update gradle-intellij-plugin and add support for IntellijIDEA 2019.1</li>
