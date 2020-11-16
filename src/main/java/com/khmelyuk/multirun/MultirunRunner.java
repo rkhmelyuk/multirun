@@ -1,5 +1,6 @@
 package com.khmelyuk.multirun;
 
+import com.intellij.coverage.CoverageExecutor;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.executors.DefaultDebugExecutor;
 import com.intellij.execution.executors.DefaultRunExecutor;
@@ -27,6 +28,7 @@ public class MultirunRunner extends DefaultProgramRunner {
         return runProfile instanceof MultirunRunConfiguration &&
                 (DefaultRunExecutor.EXECUTOR_ID.equalsIgnoreCase(executorId)
                         || DefaultDebugExecutor.EXECUTOR_ID.equalsIgnoreCase(executorId)
+                        || CoverageExecutor.EXECUTOR_ID.equalsIgnoreCase(executorId)
                         || JREBEL_EXECUTOR_ID.equalsIgnoreCase(executorId)
                         || JREBEL_DEBUG_ID.equalsIgnoreCase(executorId));
     }

@@ -36,6 +36,7 @@
         <ul>
             <li>Add support for sub-second delay.</li>
             <li>Fix waiting for delay when no more configurations to run.</li>
+            <li>Add support for Coverage executor.</li>
         </ul>
         <p><strong>1.10</strong>:</p>
         <ul>
