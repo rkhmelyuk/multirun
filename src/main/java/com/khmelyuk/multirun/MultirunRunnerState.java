@@ -34,16 +34,16 @@ import java.util.List;
 /** @author Ruslan Khmelyuk */
 public class MultirunRunnerState implements RunnableState {
 
-    private int delayTime;
-    private boolean separateTabs;
-    private boolean startOneByOne;
-    private boolean markFailedProcess;
-    private boolean hideSuccessProcess = true;
-    private List<RunConfiguration> runConfigurations;
-    private StopRunningMultirunConfigurationsAction stopRunningMultirunConfiguration;
+    private final double delayTime;
+    private final boolean separateTabs;
+    private final boolean startOneByOne;
+    private final boolean markFailedProcess;
+    private final boolean hideSuccessProcess;
+    private final List<RunConfiguration> runConfigurations;
+    private final StopRunningMultirunConfigurationsAction stopRunningMultirunConfiguration;
 
     public MultirunRunnerState(List<RunConfiguration> runConfigurations,
-                               boolean startOneByOne, int delayTime, boolean separateTabs,
+                               boolean startOneByOne, double delayTime, boolean separateTabs,
                                boolean markFailedProcess, boolean hideSuccessProcess) {
 
         this.delayTime = delayTime;
@@ -202,11 +202,12 @@ public class MultirunRunnerState implements RunnableState {
                                             if (progressIndicator.isCanceled()) {
                                                 return;
                                             }
-                                            final long passed = (System.currentTimeMillis() - start) / 1000;
+                                            final double passed = (double) (System.currentTimeMillis() - start) / 1000;
                                             final String seconds = (delayTime - passed == 1)  ? "second" : "seconds";
-                                            progressIndicator.setFraction((double) passed / delayTime);
-                                            progressIndicator.setText("waiting " + (delayTime - passed) + " " + seconds);
-                                            Thread.sleep(1000);
+                                            progressIndicator.setFraction(passed / delayTime);
+                                            final String waitingPeriod = String.format("%.1f", delayTime - passed);
+                                            progressIndicator.setText("waiting " + waitingPeriod + " " + seconds);
+                                            Thread.sleep(100);
                                         }
                                     } catch (InterruptedException ignored) {
                                         return;

@@ -74,7 +74,7 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
         });
         configurations.setCellRenderer(new RunConfigurationListCellRenderer());
 
-        delayTime.setText(String.valueOf(multirunRunConfiguration.getDelayTime()));
+        delayTime.setText(String.format("%.1f", multirunRunConfiguration.getDelayTime()));
         reuseTabs.setSelected(!multirunRunConfiguration.isSeparateTabs());
         startOneByOne.setSelected(multirunRunConfiguration.isStartOneByOne());
         markFailedProcess.setSelected(multirunRunConfiguration.isMarkFailedProcess());
@@ -87,10 +87,10 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
         multirunRunConfiguration.setStartOneByOne(startOneByOne.isSelected());
         multirunRunConfiguration.setMarkFailedProcess(markFailedProcess.isSelected());
         multirunRunConfiguration.setHideSuccessProcess(hideSuccessProcess.isSelected());
-        int delayTimeSeconds = 0;
+        double delayTimeSeconds = 0;
         if (delayTime.getText() != null && !delayTime.getText().isEmpty()) {
             try {
-                delayTimeSeconds = Integer.parseInt(delayTime.getText());
+                delayTimeSeconds = Double.parseDouble(delayTime.getText());
             } catch (Exception e) {
                 e.printStackTrace();
             }

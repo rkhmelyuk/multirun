@@ -26,7 +26,7 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
     public static final String PROP_HIDE_SUCCESS_PROCESS = "hideSuccessProcess";
     public static final String PROP_DELAY_TIME = "delayTime";
 
-    private int delayTime = 0;
+    private double delayTime = 0;
     private boolean separateTabs = true;
     private boolean startOneByOne = true;
     private boolean markFailedProcess = true;
@@ -40,7 +40,7 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
     public List<RunConfiguration> getRunConfigurations() {
         final List<RunConfiguration> result = new ArrayList<RunConfiguration>();
         final RunConfiguration[] allConfigurations = RunManager.getInstance(getProject()).getAllConfigurations();
-        for (RunConfigurationInternal runConfiguration: runConfigurations) {
+        for (RunConfigurationInternal runConfiguration : runConfigurations) {
             for (RunConfiguration configuration : allConfigurations) {
                 if (configuration.getName().equals(runConfiguration.name) &&
                         configuration.getType().getDisplayName().equals(runConfiguration.type)) {
@@ -68,7 +68,7 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
             return;
         }
 
-        for(RunConfiguration configuration: runConfigurations) {
+        for (RunConfiguration configuration : runConfigurations) {
             this.runConfigurations.add(new RunConfigurationInternal(configuration.getName(), configuration.getType().getDisplayName()));
         }
     }
@@ -105,11 +105,11 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
         this.hideSuccessProcess = hideSuccessProcess;
     }
 
-    public int getDelayTime() {
+    public double getDelayTime() {
         return delayTime;
     }
 
-    public void setDelayTime(int delayTime) {
+    public void setDelayTime(double delayTime) {
         this.delayTime = delayTime;
     }
 
@@ -135,7 +135,7 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
             hideSuccessProcess = Boolean.parseBoolean(element.getAttributeValue(PROP_HIDE_SUCCESS_PROCESS));
         }
         if (element.getAttributeValue(PROP_DELAY_TIME) != null) {
-            delayTime = Integer.parseInt(element.getAttributeValue(PROP_DELAY_TIME));
+            delayTime = Double.parseDouble(element.getAttributeValue(PROP_DELAY_TIME));
         }
 
         for (Object each : element.getContent()) {
@@ -173,13 +173,13 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
 
     @Nullable
     @Override
-    public ConfigurationPerRunnerSettings createRunnerSettings( ConfigurationInfoProvider configurationInfoProvider ) {
+    public ConfigurationPerRunnerSettings createRunnerSettings(ConfigurationInfoProvider configurationInfoProvider) {
         return null;
     }
 
     @Nullable
     @Override
-    public SettingsEditor<ConfigurationPerRunnerSettings> getRunnerSettingsEditor( ProgramRunner programRunner ) {
+    public SettingsEditor<ConfigurationPerRunnerSettings> getRunnerSettingsEditor(ProgramRunner programRunner) {
         return null;
     }
 
