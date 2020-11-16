@@ -89,7 +89,7 @@ public class MultirunRunnerState implements RunnableState {
 
             ExecutionEnvironment executionEnvironment = new ExecutionEnvironment(executor, runner, configuration, project);
 
-            runner.execute(executionEnvironment, new ProgramRunner.Callback() {
+            executionEnvironment.setCallback(new ProgramRunner.Callback() {
                 @SuppressWarnings("ConstantConditions")
                 @Override
                 public void processStarted(final RunContentDescriptor descriptor) {
@@ -189,7 +189,8 @@ public class MultirunRunnerState implements RunnableState {
                     }
                     stopRunningMultirunConfiguration.addProcess(project, processHandler);
 
-                    if (startOneByOne) {
+                    final boolean moreConfigurationsToRun = index + 1 < runConfigurations.size();
+                    if (startOneByOne && moreConfigurationsToRun) {
                         // start next configuration..
 
                         if (delayTime > 0) {
@@ -225,6 +226,8 @@ public class MultirunRunnerState implements RunnableState {
                     }
                 }
             });
+
+            runner.execute(executionEnvironment);
             started = true;
         } catch (ExecutionException e) {
             ExecutionUtil.handleExecutionError(project, executor.getToolWindowId(), configuration.getConfiguration(), e);

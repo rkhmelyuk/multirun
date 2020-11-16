@@ -35,6 +35,7 @@
         <p><strong>1.11</strong>:</p>
         <ul>
             <li>Add support for sub-second delay.</li>
+            <li>Fix waiting for delay when no more configurations to run.</li>
         </ul>
         <p><strong>1.10</strong>:</p>
         <ul>
