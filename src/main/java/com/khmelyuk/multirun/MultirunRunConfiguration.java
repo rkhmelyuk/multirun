@@ -1,6 +1,5 @@
 package com.khmelyuk.multirun;
 
-import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.RunManager;
 import com.intellij.execution.configurations.*;
@@ -21,13 +20,15 @@ import java.util.List;
 public class MultirunRunConfiguration extends RunConfigurationBase {
 
     public static final String PROP_SEPARATE_TABS = "separateTabs";
+    public static final String PROP_REUSE_TABS_WITH_FAILURE = "reuseTabsWithFailures";
     public static final String PROP_START_ONE_BY_ONE = "startOneByOne";
     public static final String PROP_MARK_FAILED_PROCESS = "markFailedProcess";
     public static final String PROP_HIDE_SUCCESS_PROCESS = "hideSuccessProcess";
     public static final String PROP_DELAY_TIME = "delayTime";
 
     private double delayTime = 0;
-    private boolean separateTabs = true;
+    private boolean reuseTabs = true;
+    private boolean reuseTabsWithFailure = false;
     private boolean startOneByOne = true;
     private boolean markFailedProcess = true;
     private boolean hideSuccessProcess = false;
@@ -73,12 +74,20 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
         }
     }
 
-    public boolean isSeparateTabs() {
-        return separateTabs;
+    public boolean isReuseTabs() {
+        return reuseTabs;
     }
 
-    public void setSeparateTabs(boolean separateTabs) {
-        this.separateTabs = separateTabs;
+    public void setReuseTabs(boolean reuseTabs) {
+        this.reuseTabs = reuseTabs;
+    }
+
+    public boolean isReuseTabsWithFailure() {
+        return reuseTabsWithFailure;
+    }
+
+    public void setReuseTabsWithFailure(boolean reuseTabs) {
+        this.reuseTabsWithFailure = reuseTabs;
     }
 
     public boolean isStartOneByOne() {
@@ -123,7 +132,10 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
         super.readExternal(element);
 
         if (element.getAttributeValue(PROP_SEPARATE_TABS) != null) {
-            separateTabs = Boolean.parseBoolean(element.getAttributeValue(PROP_SEPARATE_TABS));
+            reuseTabs = !Boolean.parseBoolean(element.getAttributeValue(PROP_SEPARATE_TABS));
+        }
+        if (element.getAttributeValue(PROP_REUSE_TABS_WITH_FAILURE) != null) {
+            reuseTabsWithFailure = Boolean.parseBoolean(element.getAttributeValue(PROP_REUSE_TABS_WITH_FAILURE));
         }
         if (element.getAttributeValue(PROP_START_ONE_BY_ONE) != null) {
             startOneByOne = Boolean.parseBoolean(element.getAttributeValue(PROP_START_ONE_BY_ONE));
@@ -155,7 +167,8 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
     public void writeExternal(Element element) throws WriteExternalException {
         super.writeExternal(element);
 
-        element.setAttribute(PROP_SEPARATE_TABS, String.valueOf(separateTabs));
+        element.setAttribute(PROP_SEPARATE_TABS, String.valueOf(!reuseTabs));
+        element.setAttribute(PROP_REUSE_TABS_WITH_FAILURE, String.valueOf(reuseTabsWithFailure));
         element.setAttribute(PROP_START_ONE_BY_ONE, String.valueOf(startOneByOne));
         element.setAttribute(PROP_MARK_FAILED_PROCESS, String.valueOf(markFailedProcess));
         element.setAttribute(PROP_HIDE_SUCCESS_PROCESS, String.valueOf(hideSuccessProcess));
@@ -186,7 +199,9 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
     @Nullable
     @Override
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment executionEnvironment) {
-        return new MultirunRunnerState(getRunConfigurations(), startOneByOne, delayTime, separateTabs, markFailedProcess, hideSuccessProcess);
+        return new MultirunRunnerState(getRunConfigurations(), startOneByOne, delayTime,
+                                       reuseTabs, reuseTabsWithFailure,
+                                       markFailedProcess, hideSuccessProcess);
     }
 
     @Override

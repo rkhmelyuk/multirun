@@ -34,6 +34,7 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
     private JBList configurations;
     private JPanel collectionsPanel;
     private JCheckBox reuseTabs;
+    private JCheckBox reuseTabsWithFailure;
     private JCheckBox startOneByOne;
     private JCheckBox markFailedProcess;
     private JCheckBox hideSuccessProcess;
@@ -75,15 +76,17 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
         configurations.setCellRenderer(new RunConfigurationListCellRenderer());
 
         delayTime.setText(String.format("%.1f", multirunRunConfiguration.getDelayTime()));
-        reuseTabs.setSelected(!multirunRunConfiguration.isSeparateTabs());
+        reuseTabs.setSelected(multirunRunConfiguration.isReuseTabs());
+        reuseTabsWithFailure.setSelected(multirunRunConfiguration.isReuseTabsWithFailure());
         startOneByOne.setSelected(multirunRunConfiguration.isStartOneByOne());
         markFailedProcess.setSelected(multirunRunConfiguration.isMarkFailedProcess());
         hideSuccessProcess.setSelected(multirunRunConfiguration.isHideSuccessProcess());
     }
 
     @Override
-    protected void applyEditorTo(MultirunRunConfiguration multirunRunConfiguration) throws ConfigurationException {
-        multirunRunConfiguration.setSeparateTabs(!reuseTabs.isSelected());
+    protected void applyEditorTo(MultirunRunConfiguration multirunRunConfiguration) {
+        multirunRunConfiguration.setReuseTabs(reuseTabs.isSelected());
+        multirunRunConfiguration.setReuseTabsWithFailure(reuseTabsWithFailure.isSelected());
         multirunRunConfiguration.setStartOneByOne(startOneByOne.isSelected());
         multirunRunConfiguration.setMarkFailedProcess(markFailedProcess.isSelected());
         multirunRunConfiguration.setHideSuccessProcess(hideSuccessProcess.isSelected());

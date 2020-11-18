@@ -34,7 +34,8 @@ import java.util.List;
 public class MultirunRunnerState implements RunProfileState {
 
     private final double delayTime;
-    private final boolean separateTabs;
+    private final boolean reuseTabs;
+    private final boolean reuseTabsWithFailure;
     private final boolean startOneByOne;
     private final boolean markFailedProcess;
     private final boolean hideSuccessProcess;
@@ -42,11 +43,13 @@ public class MultirunRunnerState implements RunProfileState {
     private final StopRunningMultirunConfigurationsAction stopRunningMultirunConfiguration;
 
     public MultirunRunnerState(List<RunConfiguration> runConfigurations,
-                               boolean startOneByOne, double delayTime, boolean separateTabs,
+                               boolean startOneByOne, double delayTime,
+                               boolean reuseTabs, boolean reuseTabsWithFailure,
                                boolean markFailedProcess, boolean hideSuccessProcess) {
 
         this.delayTime = delayTime;
-        this.separateTabs = separateTabs;
+        this.reuseTabs = reuseTabs;
+        this.reuseTabsWithFailure = reuseTabsWithFailure;
         this.startOneByOne = startOneByOne;
         this.runConfigurations = runConfigurations;
         this.markFailedProcess = markFailedProcess;
@@ -83,8 +86,8 @@ public class MultirunRunnerState implements RunProfileState {
         boolean started = false;
         try {
             final ProgramRunner runner = RunnerRegistry.getInstance().getRunner(executor.getId(), runConfiguration);
-            if (runner == null) return;
-            if (!checkRunConfiguration(executor, project, configuration)) return;
+            if (runner == null) { return; }
+            if (!checkRunConfiguration(executor, project, configuration)) { return; }
 
             ExecutionEnvironment executionEnvironment = new ExecutionEnvironment(executor, runner, configuration, project);
 
@@ -148,7 +151,7 @@ public class MultirunRunnerState implements RunProfileState {
                                     @Override
                                     public void run() {
                                         final Content content = descriptor.getAttachedContent();
-                                        if (content == null) return;
+                                        if (content == null) { return; }
 
                                         // exit code is 0 if the process completed successfully
                                         final boolean completedSuccessfully = (terminated && processEvent.getExitCode() == 0);
@@ -161,7 +164,7 @@ public class MultirunRunnerState implements RunProfileState {
                                             }
                                         }
 
-                                        if (separateTabs || !completedSuccessfully) {
+                                        if ((completedSuccessfully && !reuseTabs) || (!completedSuccessfully && !reuseTabsWithFailure)) {
                                             // attempt to pin tab if not completed successfully or asked not to reuse tabs
                                             if (!stopRunningMultirunConfiguration.isStopMultirunTriggered()) {
                                                 // ... do not pin if multirun stopped by "Stop Multirun" action.
@@ -203,7 +206,7 @@ public class MultirunRunnerState implements RunProfileState {
                                                 return;
                                             }
                                             final double passed = (double) (System.currentTimeMillis() - start) / 1000;
-                                            final String seconds = (delayTime - passed == 1)  ? "second" : "seconds";
+                                            final String seconds = (delayTime - passed == 1) ? "second" : "seconds";
                                             progressIndicator.setFraction(passed / delayTime);
                                             final String waitingPeriod = String.format("%.1f", delayTime - passed);
                                             progressIndicator.setText("waiting " + waitingPeriod + " " + seconds);
