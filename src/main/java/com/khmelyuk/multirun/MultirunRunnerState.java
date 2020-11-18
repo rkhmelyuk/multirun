@@ -2,7 +2,7 @@ package com.khmelyuk.multirun;
 
 import com.intellij.execution.*;
 import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.execution.configurations.RunnableState;
+import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.impl.RunDialog;
 import com.intellij.execution.impl.RunManagerImpl;
 import com.intellij.execution.impl.RunnerAndConfigurationSettingsImpl;
@@ -25,14 +25,13 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.LayeredIcon;
 import com.intellij.ui.content.Content;
-import com.intellij.util.NotNullFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 /** @author Ruslan Khmelyuk */
-public class MultirunRunnerState implements RunnableState {
+public class MultirunRunnerState implements RunProfileState {
 
     private final double delayTime;
     private final boolean separateTabs;
@@ -60,7 +59,7 @@ public class MultirunRunnerState implements RunnableState {
     @Nullable
     @Override
     public ExecutionResult execute(Executor executor, @NotNull ProgramRunner programRunner) throws ExecutionException {
-        stopRunningMultirunConfiguration.beginStaringConfigurations();
+        stopRunningMultirunConfiguration.beginStartingConfigurations();
         runConfigurations(executor, runConfigurations, 0);
         return null;
     }
@@ -125,8 +124,8 @@ public class MultirunRunnerState implements RunnableState {
                                             }
                                         }
                                     } else {
-                                        // mark all current console tab as pinned
-                                        content.setPinned(true);
+                                        // ensure tab is not pinned
+                                        content.setPinned(false);
 
                                         // mark running process tab with *
                                         content.setDisplayName(descriptor.getDisplayName() + "*");
@@ -138,9 +137,7 @@ public class MultirunRunnerState implements RunnableState {
                                 onTermination(processEvent, true);
                             }
 
-                            @Override public void processWillTerminate(ProcessEvent processEvent, boolean willBeDestroyed) {
-                                onTermination(processEvent, false);
-                            }
+                            @Override public void processWillTerminate(ProcessEvent processEvent, boolean willBeDestroyed) {}
 
                             private void onTermination(final ProcessEvent processEvent, final boolean terminated) {
                                 if (descriptor.getAttachedContent() == null) {
@@ -164,10 +161,12 @@ public class MultirunRunnerState implements RunnableState {
                                             }
                                         }
 
-                                        if (!separateTabs && completedSuccessfully) {
-                                            // un-pin the console tab if re-use is allowed and process completed successfully,
-                                            // so the tab could be re-used for other processes
-                                            content.setPinned(false);
+                                        if (separateTabs || !completedSuccessfully) {
+                                            // attempt to pin tab if not completed successfully or asked not to reuse tabs
+                                            if (!stopRunningMultirunConfiguration.isStopMultirunTriggered()) {
+                                                // ... do not pin if multirun stopped by "Stop Multirun" action.
+                                                content.setPinned(true);
+                                            }
                                         }
 
                                         // remove the * used to identify running process
@@ -253,7 +252,7 @@ public class MultirunRunnerState implements RunnableState {
         }
 
         if (!RunManagerImpl.canRunConfiguration(configuration, executor) || configuration.isEditBeforeRun()) {
-            if (!RunDialog.editConfiguration(project, configuration, "Edit configuration", executor)) {
+            if (!RunDialog.editConfiguration(project, configuration, "Edit Configuration", executor)) {
                 return false;
             }
 
@@ -261,7 +260,7 @@ public class MultirunRunnerState implements RunnableState {
                 if (0 == Messages.showYesNoDialog(project, "Configuration is still incorrect. Do you want to edit it again?",
                                                   "Change Configuration Settings",
                                                   "Edit", "Continue Anyway", Messages.getErrorIcon())) {
-                    if (!RunDialog.editConfiguration(project, configuration, "Edit configuration", executor)) {
+                    if (!RunDialog.editConfiguration(project, configuration, "Edit Configuration", executor)) {
                         break;
                     }
                 } else {
@@ -271,19 +270,4 @@ public class MultirunRunnerState implements RunnableState {
         }
         return true;
     }
-
-    private RunContentDescriptor getRunContentDescriptor(final RunConfiguration runConfiguration, Project project) {
-        List<RunContentDescriptor> runContentDescriptors = ExecutionHelper.collectConsolesByDisplayName(
-                project,
-                new NotNullFunction<String, Boolean>() {
-                    @NotNull
-                    @Override
-                    public Boolean fun(String name) {
-                        return runConfiguration.getName().equals(name);
-                    }
-                });
-
-        return !runContentDescriptors.isEmpty() ? runContentDescriptors.get(0) : null;
-    }
-
 }

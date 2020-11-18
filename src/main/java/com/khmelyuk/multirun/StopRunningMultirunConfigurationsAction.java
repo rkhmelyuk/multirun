@@ -94,9 +94,13 @@ public class StopRunningMultirunConfigurationsAction extends AnAction {
         return !stopStartingConfigurations.get();
     }
 
+    public boolean isStopMultirunTriggered() {
+        return stopStartingConfigurations.get();
+    }
+
     // TODO - move to some component
 
-    public void beginStaringConfigurations() {
+    public void beginStartingConfigurations() {
         if (startingCounter.incrementAndGet() == 1) {
             stopStartingConfigurations.set(false);
         }
