@@ -37,6 +37,10 @@
             <li>Add support for sub-second delay.</li>
             <li>Fix waiting for delay when no more configurations to run.</li>
             <li>Add support for Coverage executor.</li>
+            <li>Enable re-using tabs with successful and failure results.</li>
+            <li>Fix issue when tabs couldn't be re-used after 'Stop Multirun' command.</li>
+            <li>Support serial execution of the configurations (Use 'Start configurations one by one' and use negative delay)</li>
+            <li>When 'Start configurations one by one' used with delay, do not wait till delay to start next configuration.</li>
         </ul>
         <p><strong>1.10</strong>:</p>
         <ul>
@@ -163,9 +167,7 @@
     </application-components>
 
     <project-components>
-        <component>
-            <implementation-class>com.khmelyuk.multirun.RegisterRunConfigurationBeforeProvider</implementation-class>
-        </component>
+
     </project-components>
 
     <actions>

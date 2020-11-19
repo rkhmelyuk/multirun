@@ -77,6 +77,14 @@ public class StopRunningMultirunConfigurationsAction extends AnAction {
         this.processes.get(project).add(process);
     }
 
+    public void removeProcess(final Project project, final ProcessHandler process) {
+        if (process == null) return;
+
+        if (this.processes.containsKey(project)) {
+            this.processes.get(project).remove(process);
+        }
+    }
+
     private void stop(ProcessHandler processHandler) {
         if (processHandler instanceof KillableProcess && processHandler.isProcessTerminating()) {
             ((KillableProcess) processHandler).killProcess();

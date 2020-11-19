@@ -29,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /** @author Ruslan Khmelyuk */
 public class MultirunRunnerState implements RunProfileState {
@@ -92,6 +93,8 @@ public class MultirunRunnerState implements RunProfileState {
             ExecutionEnvironment executionEnvironment = new ExecutionEnvironment(executor, runner, configuration, project);
 
             executionEnvironment.setCallback(new ProgramRunner.Callback() {
+                private final AtomicBoolean processTerminated = new AtomicBoolean(false);
+
                 @SuppressWarnings("ConstantConditions")
                 @Override
                 public void processStarted(final RunContentDescriptor descriptor) {
@@ -138,6 +141,8 @@ public class MultirunRunnerState implements RunProfileState {
 
                             @Override public void processTerminated(final ProcessEvent processEvent) {
                                 onTermination(processEvent, true);
+                                processTerminated.set(true);
+                                stopRunningMultirunConfiguration.removeProcess(project, processEvent.getProcessHandler());
                             }
 
                             @Override public void processWillTerminate(ProcessEvent processEvent, boolean willBeDestroyed) {}
@@ -201,7 +206,11 @@ public class MultirunRunnerState implements RunProfileState {
                                 @Override
                                 public void run(@NotNull ProgressIndicator progressIndicator) {
                                     try {
+                                        progressIndicator.setIndeterminate(false);
                                         while (System.currentTimeMillis() - start < delayTime * 1000) {
+                                            if (processTerminated.get()) {
+                                                break;
+                                            }
                                             if (progressIndicator.isCanceled()) {
                                                 return;
                                             }
@@ -222,9 +231,32 @@ public class MultirunRunnerState implements RunProfileState {
                                     });
                                 }
                             });
+                        } else if (delayTime < 0) {
+                            ProgressManager.getInstance().run(new Task.Backgroundable(project, "Waiting for process to complete") {
+                                @Override
+                                public void run(@NotNull ProgressIndicator progressIndicator) {
+                                    try {
+                                        while (!processTerminated.get()) {
+                                            if (progressIndicator.isCanceled()) {
+                                                return;
+                                            }
+                                            Thread.sleep(200);
+                                        }
+                                    } catch (InterruptedException ignored) {
+                                        return;
+                                    }
+                                    ApplicationManager.getApplication().invokeLater(new Runnable() {
+                                        public void run() {
+                                            runConfigurations(executor, runConfigurations, index + 1);
+                                        }
+                                    });
+                                }
+                            });
                         } else {
                             runConfigurations(executor, runConfigurations, index + 1);
                         }
+                    } else {
+                        stopRunningMultirunConfiguration.doneStaringConfigurations();
                     }
                 }
             });
