@@ -90,9 +90,9 @@ public class MultirunRunnerState implements RunProfileState {
             if (runner == null) { return; }
             if (!checkRunConfiguration(executor, project, configuration)) { return; }
 
-            ExecutionEnvironment executionEnvironment = new ExecutionEnvironment(executor, runner, configuration, project);
+            final ExecutionEnvironment executionEnvironment = new ExecutionEnvironment(executor, runner, configuration, project);
 
-            executionEnvironment.setCallback(new ProgramRunner.Callback() {
+            runner.execute(executionEnvironment, new ProgramRunner.Callback() {
                 private final AtomicBoolean processTerminated = new AtomicBoolean(false);
 
                 @SuppressWarnings("ConstantConditions")
@@ -260,8 +260,6 @@ public class MultirunRunnerState implements RunProfileState {
                     }
                 }
             });
-
-            runner.execute(executionEnvironment);
             started = true;
         } catch (ExecutionException e) {
             ExecutionUtil.handleExecutionError(project, executor.getToolWindowId(), configuration.getConfiguration(), e);
