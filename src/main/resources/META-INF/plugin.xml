@@ -1,12 +1,12 @@
 <idea-plugin url="https://plugins.jetbrains.com/plugin/7248-multirun">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>1.11.1</version>
+    <version>1.11.2</version>
     <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
     <description>
         <![CDATA[
-        <p>Allows to run multiple run configurations at once: group multiple run configurations and start them in a single click.
+        <p>Run multiple run configurations at once: group multiple run configurations and start them in a single click.
         Not only application and test run configurations can be grouped, but other Multirun configurations can be organized
         into single run configuration.</p>
 
@@ -32,6 +32,10 @@
 
     <change-notes>
         <![CDATA[
+        <p><strong>1.11.2</strong>:</p>
+        <ul>
+            <li>Add plugin log icon.</li>
+        </ul>
         <p><strong>1.11</strong>:</p>
         <ul>
             <li>Add support for sub-second delay.</li>
