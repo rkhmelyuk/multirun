@@ -1,4 +1,4 @@
-multirun
+Multirun
 ========
 
 IntellijIDEA plugin to execute multiple Run Configurations in single click. 
