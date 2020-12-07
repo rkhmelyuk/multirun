@@ -32,6 +32,10 @@
 
     <change-notes>
         <![CDATA[
+        <p><strong>1.11.3</strong>:</p>
+        <ul>
+            <li>Move out of deprecated IntelliJ Platform API.</li>
+        </ul>
         <p><strong>1.11.2</strong>:</p>
         <ul>
             <li>Add plugin log icon.</li>

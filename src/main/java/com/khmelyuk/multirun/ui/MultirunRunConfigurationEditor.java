@@ -3,7 +3,6 @@ package com.khmelyuk.multirun.ui;
 import com.intellij.execution.RunManager;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
@@ -127,22 +126,22 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
                 final JBList list = new JBList(getConfigurationsToAdd());
                 list.setCellRenderer(new RunConfigurationListCellRenderer());
                 JBPopupFactory.getInstance().createListPopupBuilder(list)
-                        .setItemChoosenCallback(new Runnable() {
-                            @Override
-                            public void run() {
-                                int[] selectedIndices = list.getSelectedIndices();
-                                for (int index : selectedIndices) {
-                                    RunConfiguration selectedRunConfiguration = (RunConfiguration) list.getModel().getElementAt(index);
-                                    if (selectedRunConfiguration != null) {
-                                        ((DefaultListModel) configurations.getModel()).addElement(selectedRunConfiguration);
-                                    }
+                              .setItemChoosenCallback(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      int[] selectedIndices = list.getSelectedIndices();
+                                      for (int index : selectedIndices) {
+                                          RunConfiguration selectedRunConfiguration = (RunConfiguration) list.getModel().getElementAt(index);
+                                          if (selectedRunConfiguration != null) {
+                                              ((DefaultListModel) configurations.getModel()).addElement(selectedRunConfiguration);
+                                          }
 
-                                    markConfigurationsChanged();
-                                }
-                            }
-                        })
-                        .createPopup()
-                        .showUnderneathOf(button.getContextComponent());
+                                          markConfigurationsChanged();
+                                      }
+                                  }
+                              })
+                              .createPopup()
+                              .showUnderneathOf(button.getContextComponent());
             }
         });
         myDecorator.setAddActionUpdater(new AnActionButtonUpdater() {
