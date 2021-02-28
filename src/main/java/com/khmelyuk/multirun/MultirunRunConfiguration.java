@@ -40,7 +40,7 @@ public class MultirunRunConfiguration extends RunConfigurationBase {
 
     public List<RunConfiguration> getRunConfigurations() {
         final List<RunConfiguration> result = new ArrayList<RunConfiguration>();
-        final RunConfiguration[] allConfigurations = RunManager.getInstance(getProject()).getAllConfigurations();
+        final List<RunConfiguration> allConfigurations = RunManager.getInstance(getProject()).getAllConfigurationsList();
         for (RunConfigurationInternal runConfiguration : runConfigurations) {
             for (RunConfiguration configuration : allConfigurations) {
                 if (configuration.getName().equals(runConfiguration.name) &&

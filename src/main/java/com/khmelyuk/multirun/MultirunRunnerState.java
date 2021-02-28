@@ -62,7 +62,7 @@ public class MultirunRunnerState implements RunProfileState {
 
     @Nullable
     @Override
-    public ExecutionResult execute(Executor executor, @NotNull ProgramRunner programRunner) throws ExecutionException {
+    public ExecutionResult execute(Executor executor, @NotNull ProgramRunner programRunner) {
         stopRunningMultirunConfiguration.beginStartingConfigurations();
         runConfigurations(executor, runConfigurations, 0);
         return null;
@@ -92,174 +92,180 @@ public class MultirunRunnerState implements RunProfileState {
 
             final ExecutionEnvironment executionEnvironment = new ExecutionEnvironment(executor, runner, configuration, project);
 
-            runner.execute(executionEnvironment, new ProgramRunner.Callback() {
-                private final AtomicBoolean processTerminated = new AtomicBoolean(false);
+            executionEnvironment.setCallback(
+                    new ProgramRunner.Callback() {
+                        private final AtomicBoolean processTerminated = new AtomicBoolean(false);
 
-                @SuppressWarnings("ConstantConditions")
-                @Override
-                public void processStarted(final RunContentDescriptor descriptor) {
-                    if (descriptor == null) {
-                        if (startOneByOne) {
-                            // start next configuration..
-                            runConfigurations(executor, runConfigurations, index + 1);
-                        }
-                        return;
-                    }
-
-                    final ProcessHandler processHandler = descriptor.getProcessHandler();
-                    if (processHandler != null) {
-                        processHandler.addProcessListener(new ProcessAdapter() {
-                            @SuppressWarnings("ConstantConditions")
-                            @Override
-                            public void startNotified(ProcessEvent processEvent) {
-                                Content content = descriptor.getAttachedContent();
-                                if (content != null) {
-                                    content.setIcon(descriptor.getIcon());
-                                    if (!stopRunningMultirunConfiguration.canContinueStartingConfigurations()) {
-                                        // Multirun was stopped - destroy processes that are still starting up
-                                        processHandler.destroyProcess();
-
-                                        if (!content.isPinned() && !startOneByOne) {
-                                            // checks if not pinned, to avoid destroying already existed tab
-                                            // checks if start one by one - no need to close the console tab, as it's won't be shown
-                                            // as other checks disallow starting it
-
-                                            // content.getManager() can be null, if content is removed already as part of destroy above
-                                            if (content.getManager() != null) {
-                                                content.getManager().removeContent(content, false);
-                                            }
-                                        }
-                                    } else {
-                                        // ensure tab is not pinned
-                                        content.setPinned(false);
-
-                                        // mark running process tab with *
-                                        content.setDisplayName(descriptor.getDisplayName() + "*");
-                                    }
+                        @SuppressWarnings("ConstantConditions")
+                        @Override
+                        public void processStarted(final RunContentDescriptor descriptor) {
+                            if (descriptor == null) {
+                                if (startOneByOne) {
+                                    // start next configuration..
+                                    runConfigurations(executor, runConfigurations, index + 1);
                                 }
+                                return;
                             }
 
-                            @Override public void processTerminated(final ProcessEvent processEvent) {
-                                onTermination(processEvent, true);
-                                processTerminated.set(true);
-                                stopRunningMultirunConfiguration.removeProcess(project, processEvent.getProcessHandler());
-                            }
-
-                            @Override public void processWillTerminate(ProcessEvent processEvent, boolean willBeDestroyed) {}
-
-                            private void onTermination(final ProcessEvent processEvent, final boolean terminated) {
-                                if (descriptor.getAttachedContent() == null) {
-                                    return;
-                                }
-
-                                ApplicationManager.getApplication().invokeLater(new Runnable() {
+                            final ProcessHandler processHandler = descriptor.getProcessHandler();
+                            if (processHandler != null) {
+                                processHandler.addProcessListener(new ProcessAdapter() {
+                                    @SuppressWarnings("ConstantConditions")
                                     @Override
-                                    public void run() {
-                                        final Content content = descriptor.getAttachedContent();
-                                        if (content == null) { return; }
+                                    public void startNotified(ProcessEvent processEvent) {
+                                        Content content = descriptor.getAttachedContent();
+                                        if (content != null) {
+                                            content.setIcon(descriptor.getIcon());
+                                            if (!stopRunningMultirunConfiguration.canContinueStartingConfigurations()) {
+                                                // Multirun was stopped - destroy processes that are still starting up
+                                                processHandler.destroyProcess();
 
-                                        // exit code is 0 if the process completed successfully
-                                        final boolean completedSuccessfully = (terminated && processEvent.getExitCode() == 0);
+                                                if (!content.isPinned() && !startOneByOne) {
+                                                    // checks if not pinned, to avoid destroying already existed tab
+                                                    // checks if start one by one - no need to close the console tab, as it's won't be shown
+                                                    // as other checks disallow starting it
 
-                                        if (hideSuccessProcess && completedSuccessfully) {
-                                            // close the tab for the success process and exit - nothing else could be done
-                                            if (content.getManager() != null) {
-                                                content.getManager().removeContent(content, false);
-                                                return;
-                                            }
-                                        }
-
-                                        if ((completedSuccessfully && !reuseTabs) || (!completedSuccessfully && !reuseTabsWithFailure)) {
-                                            // attempt to pin tab if not completed successfully or asked not to reuse tabs
-                                            if (!stopRunningMultirunConfiguration.isStopMultirunTriggered()) {
-                                                // ... do not pin if multirun stopped by "Stop Multirun" action.
-                                                content.setPinned(true);
-                                            }
-                                        }
-
-                                        // remove the * used to identify running process
-                                        content.setDisplayName(descriptor.getDisplayName());
-
-                                        // add the alert icon in case if process existed with non-0 status
-                                        if (markFailedProcess && processEvent.getExitCode() != 0) {
-                                            ApplicationManager.getApplication().invokeLater(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    content.setIcon(LayeredIcon.create(content.getIcon(), AllIcons.Nodes.TabAlert));
+                                                    // content.getManager() can be null, if content is removed already as part of destroy above
+                                                    if (content.getManager() != null) {
+                                                        content.getManager().removeContent(content, false);
+                                                    }
                                                 }
-                                            });
+                                            } else {
+                                                // ensure tab is not pinned
+                                                content.setPinned(false);
+
+                                                // mark running process tab with *
+                                                content.setDisplayName(descriptor.getDisplayName() + "*");
+                                            }
                                         }
+                                    }
+
+                                    @Override
+                                    public void processTerminated(final ProcessEvent processEvent) {
+                                        onTermination(processEvent, true);
+                                        processTerminated.set(true);
+                                        stopRunningMultirunConfiguration.removeProcess(project, processEvent.getProcessHandler());
+                                    }
+
+                                    @Override
+                                    public void processWillTerminate(ProcessEvent processEvent, boolean willBeDestroyed) {}
+
+                                    private void onTermination(final ProcessEvent processEvent, final boolean terminated) {
+                                        if (descriptor.getAttachedContent() == null) {
+                                            return;
+                                        }
+
+                                        ApplicationManager.getApplication().invokeLater(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                final Content content = descriptor.getAttachedContent();
+                                                if (content == null) { return; }
+
+                                                // exit code is 0 if the process completed successfully
+                                                final boolean completedSuccessfully = (terminated && processEvent.getExitCode() == 0);
+
+                                                if (hideSuccessProcess && completedSuccessfully) {
+                                                    // close the tab for the success process and exit - nothing else could be done
+                                                    if (content.getManager() != null) {
+                                                        content.getManager().removeContent(content, false);
+                                                        return;
+                                                    }
+                                                }
+
+                                                if ((completedSuccessfully && !reuseTabs) || (!completedSuccessfully && !reuseTabsWithFailure)) {
+                                                    // attempt to pin tab if not completed successfully or asked not to reuse tabs
+                                                    if (!stopRunningMultirunConfiguration.isStopMultirunTriggered()) {
+                                                        // ... do not pin if multirun stopped by "Stop Multirun" action.
+                                                        content.setPinned(true);
+                                                    }
+                                                }
+
+                                                // remove the * used to identify running process
+                                                content.setDisplayName(descriptor.getDisplayName());
+
+                                                // add the alert icon in case if process existed with non-0 status
+                                                if (markFailedProcess && processEvent.getExitCode() != 0) {
+                                                    ApplicationManager.getApplication().invokeLater(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            content.setIcon(LayeredIcon.create(content.getIcon(), AllIcons.Nodes.TabAlert));
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
                                     }
                                 });
                             }
-                        });
-                    }
-                    stopRunningMultirunConfiguration.addProcess(project, processHandler);
+                            stopRunningMultirunConfiguration.addProcess(project, processHandler);
 
-                    final boolean moreConfigurationsToRun = index + 1 < runConfigurations.size();
-                    if (startOneByOne && moreConfigurationsToRun) {
-                        // start next configuration..
+                            final boolean moreConfigurationsToRun = index + 1 < runConfigurations.size();
+                            if (startOneByOne && moreConfigurationsToRun) {
+                                // start next configuration..
 
-                        if (delayTime > 0) {
-                            final long start = System.currentTimeMillis();
-                            ProgressManager.getInstance().run(new Task.Backgroundable(project, "Waiting for delay") {
-                                @Override
-                                public void run(@NotNull ProgressIndicator progressIndicator) {
-                                    try {
-                                        progressIndicator.setIndeterminate(false);
-                                        while (System.currentTimeMillis() - start < delayTime * 1000) {
-                                            if (processTerminated.get()) {
-                                                break;
-                                            }
-                                            if (progressIndicator.isCanceled()) {
+                                if (delayTime > 0) {
+                                    final long start = System.currentTimeMillis();
+                                    ProgressManager.getInstance().run(new Task.Backgroundable(project, "Waiting for delay") {
+                                        @Override
+                                        public void run(@NotNull ProgressIndicator progressIndicator) {
+                                            try {
+                                                progressIndicator.setIndeterminate(false);
+                                                while (System.currentTimeMillis() - start < delayTime * 1000) {
+                                                    if (processTerminated.get()) {
+                                                        break;
+                                                    }
+                                                    if (progressIndicator.isCanceled()) {
+                                                        return;
+                                                    }
+                                                    final double passed = (double) (System.currentTimeMillis() - start) / 1000;
+                                                    final String seconds = (delayTime - passed == 1) ? "second" : "seconds";
+                                                    progressIndicator.setFraction(passed / delayTime);
+                                                    final String waitingPeriod = String.format("%.1f", delayTime - passed);
+                                                    progressIndicator.setText("waiting " + waitingPeriod + " " + seconds);
+                                                    Thread.sleep(100);
+                                                }
+                                            } catch (InterruptedException ignored) {
                                                 return;
                                             }
-                                            final double passed = (double) (System.currentTimeMillis() - start) / 1000;
-                                            final String seconds = (delayTime - passed == 1) ? "second" : "seconds";
-                                            progressIndicator.setFraction(passed / delayTime);
-                                            final String waitingPeriod = String.format("%.1f", delayTime - passed);
-                                            progressIndicator.setText("waiting " + waitingPeriod + " " + seconds);
-                                            Thread.sleep(100);
-                                        }
-                                    } catch (InterruptedException ignored) {
-                                        return;
-                                    }
-                                    ApplicationManager.getApplication().invokeLater(new Runnable() {
-                                        public void run() {
-                                            runConfigurations(executor, runConfigurations, index + 1);
+                                            ApplicationManager.getApplication().invokeLater(new Runnable() {
+                                                public void run() {
+                                                    runConfigurations(executor, runConfigurations, index + 1);
+                                                }
+                                            });
                                         }
                                     });
-                                }
-                            });
-                        } else if (delayTime < 0) {
-                            ProgressManager.getInstance().run(new Task.Backgroundable(project, "Waiting for process to complete") {
-                                @Override
-                                public void run(@NotNull ProgressIndicator progressIndicator) {
-                                    try {
-                                        while (!processTerminated.get()) {
-                                            if (progressIndicator.isCanceled()) {
+                                } else if (delayTime < 0) {
+                                    ProgressManager.getInstance().run(new Task.Backgroundable(project, "Waiting for process to complete") {
+                                        @Override
+                                        public void run(@NotNull ProgressIndicator progressIndicator) {
+                                            try {
+                                                while (!processTerminated.get()) {
+                                                    if (progressIndicator.isCanceled()) {
+                                                        return;
+                                                    }
+                                                    Thread.sleep(200);
+                                                }
+                                            } catch (InterruptedException ignored) {
                                                 return;
                                             }
-                                            Thread.sleep(200);
-                                        }
-                                    } catch (InterruptedException ignored) {
-                                        return;
-                                    }
-                                    ApplicationManager.getApplication().invokeLater(new Runnable() {
-                                        public void run() {
-                                            runConfigurations(executor, runConfigurations, index + 1);
+                                            ApplicationManager.getApplication().invokeLater(new Runnable() {
+                                                public void run() {
+                                                    runConfigurations(executor, runConfigurations, index + 1);
+                                                }
+                                            });
                                         }
                                     });
+                                } else {
+                                    runConfigurations(executor, runConfigurations, index + 1);
                                 }
-                            });
-                        } else {
-                            runConfigurations(executor, runConfigurations, index + 1);
+                            } else {
+                                stopRunningMultirunConfiguration.doneStaringConfigurations();
+                            }
                         }
-                    } else {
-                        stopRunningMultirunConfiguration.doneStaringConfigurations();
                     }
-                }
-            });
+            );
+
+            runner.execute(executionEnvironment);
             started = true;
         } catch (ExecutionException e) {
             ExecutionUtil.handleExecutionError(project, executor.getToolWindowId(), configuration.getConfiguration(), e);
@@ -277,10 +283,11 @@ public class MultirunRunnerState implements RunProfileState {
     private boolean checkRunConfiguration(Executor executor, Project project, RunnerAndConfigurationSettings configuration) {
         ExecutionTarget target = ExecutionTargetManager.getActiveTarget(project);
 
-        if (!ExecutionTargetManager.canRun(configuration, target)) {
+        if (!ExecutionTargetManager.canRun(configuration.getConfiguration(), target)) {
             ExecutionUtil.handleExecutionError(
                     project, executor.getToolWindowId(), configuration.getConfiguration(),
-                    new ExecutionException(StringUtil.escapeXml("Cannot run '" + configuration.getName() + "' on '" + target.getDisplayName() + "'")));
+                    new ExecutionException(StringUtil.escapeXmlEntities("Cannot run '" + configuration.getName()
+                                                                                + "' on '" + target.getDisplayName() + "'")));
             return false;
         }
 

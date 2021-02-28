@@ -110,9 +110,8 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
         configurations = new JBList();
         configurations.getEmptyText().setText("Add run configurations to this list");
         final ToolbarDecorator myDecorator = ToolbarDecorator.createDecorator(configurations);
-        if (!SystemInfo.isMac) {
-            myDecorator.setAsUsualTopToolbar();
-        }
+        myDecorator.initPosition();
+
         myDecorator.setRemoveAction(new AnActionButtonRunnable() {
             @Override
             public void run(AnActionButton anActionButton) {
@@ -183,7 +182,7 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
 
     private java.util.List<RunConfiguration> getConfigurationsToAdd() {
         java.util.List<RunConfiguration> result = new ArrayList<RunConfiguration>();
-        RunConfiguration[] allConfigurations = RunManager.getInstance(project).getAllConfigurations();
+        java.util.List<RunConfiguration> allConfigurations = RunManager.getInstance(project).getAllConfigurationsList();
         for (RunConfiguration configuration : allConfigurations) {
             if (this.configuration.equals(configuration)) {
                 // skip current

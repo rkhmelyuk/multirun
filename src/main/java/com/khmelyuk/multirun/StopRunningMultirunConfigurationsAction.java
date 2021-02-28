@@ -21,9 +21,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class StopRunningMultirunConfigurationsAction extends AnAction {
 
-    private ConcurrentHashMap<Project, List<ProcessHandler>> processes = new ConcurrentHashMap<Project, List<ProcessHandler>>();
-    private AtomicBoolean stopStartingConfigurations = new AtomicBoolean(false);
-    private AtomicInteger startingCounter = new AtomicInteger(0);
+    private final ConcurrentHashMap<Project, List<ProcessHandler>> processes = new ConcurrentHashMap<>();
+    private final AtomicBoolean stopStartingConfigurations = new AtomicBoolean(false);
+    private final AtomicInteger startingCounter = new AtomicInteger(0);
 
     @Override public void update(AnActionEvent e) {
         super.update(e);
@@ -55,7 +55,7 @@ public class StopRunningMultirunConfigurationsAction extends AnAction {
             System.out.println("Nothing to stop");
             return;
         }
-        List<ProcessHandler> stoppedProcesses = new ArrayList<ProcessHandler>();
+        List<ProcessHandler> stoppedProcesses = new ArrayList<>();
         for (ProcessHandler process : processesToStop) {
 
             stop(process);
@@ -73,7 +73,7 @@ public class StopRunningMultirunConfigurationsAction extends AnAction {
             stop(process);
             return;
         }
-        this.processes.putIfAbsent(project, new CopyOnWriteArrayList<ProcessHandler>());
+        this.processes.putIfAbsent(project, new CopyOnWriteArrayList<>());
         this.processes.get(project).add(process);
     }
 
