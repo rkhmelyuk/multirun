@@ -1,6 +1,18 @@
 package com.khmelyuk.multirun;
 
-import com.intellij.execution.*;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import com.intellij.execution.ExecutionException;
+import com.intellij.execution.ExecutionResult;
+import com.intellij.execution.ExecutionTarget;
+import com.intellij.execution.ExecutionTargetManager;
+import com.intellij.execution.Executor;
+import com.intellij.execution.RunnerAndConfigurationSettings;
+import com.intellij.execution.RunnerRegistry;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.impl.RunDialog;
@@ -25,13 +37,10 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.LayeredIcon;
 import com.intellij.ui.content.Content;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-/** @author Ruslan Khmelyuk */
+/**
+ * @author Ruslan Khmelyuk
+ */
 public class MultirunRunnerState implements RunProfileState {
 
     private final double delayTime;
@@ -64,7 +73,8 @@ public class MultirunRunnerState implements RunProfileState {
     @Override
     public ExecutionResult execute(Executor executor, @NotNull ProgramRunner programRunner) {
         stopRunningMultirunConfiguration.beginStartingConfigurations();
-        runConfigurations(executor, runConfigurations, 0);
+        ApplicationManager.getApplication().executeOnPooledThread(() -> runConfigurations(executor, runConfigurations, 0));
+
         return null;
     }
 
@@ -87,8 +97,8 @@ public class MultirunRunnerState implements RunProfileState {
         boolean started = false;
         try {
             final ProgramRunner runner = RunnerRegistry.getInstance().getRunner(executor.getId(), runConfiguration);
-            if (runner == null) { return; }
-            if (!checkRunConfiguration(executor, project, configuration)) { return; }
+            if (runner == null) {return;}
+            if (!checkRunConfiguration(executor, project, configuration)) {return;}
 
             final ExecutionEnvironment executionEnvironment = new ExecutionEnvironment(executor, runner, configuration, project);
 
@@ -102,7 +112,8 @@ public class MultirunRunnerState implements RunProfileState {
                             if (descriptor == null) {
                                 if (startOneByOne) {
                                     // start next configuration..
-                                    runConfigurations(executor, runConfigurations, index + 1);
+                                    ApplicationManager.getApplication().executeOnPooledThread(
+                                            () -> runConfigurations(executor, runConfigurations, index + 1));
                                 }
                                 return;
                             }
@@ -155,21 +166,23 @@ public class MultirunRunnerState implements RunProfileState {
                                             return;
                                         }
 
-                                        ApplicationManager.getApplication().invokeLater(new Runnable() {
+                                        ApplicationManager.getApplication().executeOnPooledThread(new Runnable() {
                                             @Override
                                             public void run() {
                                                 final Content content = descriptor.getAttachedContent();
-                                                if (content == null) { return; }
+                                                if (content == null) {return;}
 
                                                 // exit code is 0 if the process completed successfully
                                                 final boolean completedSuccessfully = (terminated && processEvent.getExitCode() == 0);
 
                                                 if (hideSuccessProcess && completedSuccessfully) {
                                                     // close the tab for the success process and exit - nothing else could be done
-                                                    if (content.getManager() != null) {
-                                                        content.getManager().removeContent(content, false);
-                                                        return;
-                                                    }
+                                                    ApplicationManager.getApplication().invokeLater(() -> {
+                                                        if (content.getManager() != null) {
+                                                            content.getManager().removeContent(content, false);
+                                                        }
+                                                    });
+                                                    return;
                                                 }
 
                                                 if ((completedSuccessfully && !reuseTabs) || (!completedSuccessfully && !reuseTabsWithFailure)) {
@@ -185,12 +198,8 @@ public class MultirunRunnerState implements RunProfileState {
 
                                                 // add the alert icon in case if process existed with non-0 status
                                                 if (markFailedProcess && processEvent.getExitCode() != 0) {
-                                                    ApplicationManager.getApplication().invokeLater(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            content.setIcon(LayeredIcon.create(content.getIcon(), AllIcons.Nodes.TabAlert));
-                                                        }
-                                                    });
+                                                    ApplicationManager.getApplication().executeOnPooledThread(
+                                                            () -> content.setIcon(LayeredIcon.create(content.getIcon(), AllIcons.Nodes.TabAlert)));
                                                 }
                                             }
                                         });
@@ -227,11 +236,8 @@ public class MultirunRunnerState implements RunProfileState {
                                             } catch (InterruptedException ignored) {
                                                 return;
                                             }
-                                            ApplicationManager.getApplication().invokeLater(new Runnable() {
-                                                public void run() {
-                                                    runConfigurations(executor, runConfigurations, index + 1);
-                                                }
-                                            });
+                                            ApplicationManager.getApplication().executeOnPooledThread(
+                                                    () -> runConfigurations(executor, runConfigurations, index + 1));
                                         }
                                     });
                                 } else if (delayTime < 0) {
@@ -248,15 +254,14 @@ public class MultirunRunnerState implements RunProfileState {
                                             } catch (InterruptedException ignored) {
                                                 return;
                                             }
-                                            ApplicationManager.getApplication().invokeLater(new Runnable() {
-                                                public void run() {
-                                                    runConfigurations(executor, runConfigurations, index + 1);
-                                                }
-                                            });
+                                            ApplicationManager.getApplication().executeOnPooledThread(
+                                                    () -> runConfigurations(executor, runConfigurations, index + 1));
                                         }
                                     });
                                 } else {
-                                    runConfigurations(executor, runConfigurations, index + 1);
+                                    ApplicationManager.getApplication().executeOnPooledThread(
+                                            () -> runConfigurations(executor, runConfigurations, index + 1));
+//                                    runConfigurations(executor, runConfigurations, index + 1);
                                 }
                             } else {
                                 stopRunningMultirunConfiguration.doneStaringConfigurations();
@@ -272,10 +277,12 @@ public class MultirunRunnerState implements RunProfileState {
         } finally {
             // start the next one
             if (!startOneByOne) {
-                runConfigurations(executor, runConfigurations, index + 1);
+                ApplicationManager.getApplication().executeOnPooledThread(
+                        () -> runConfigurations(executor, runConfigurations, index + 1));
             } else if (!started) {
                 // failed to start current, means the chain is broken
-                runConfigurations(executor, runConfigurations, index + 1);
+                ApplicationManager.getApplication().executeOnPooledThread(
+                        () -> runConfigurations(executor, runConfigurations, index + 1));
             }
         }
     }

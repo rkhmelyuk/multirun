@@ -1,18 +1,18 @@
 package com.khmelyuk.multirun;
 
-import com.intellij.execution.KillableProcess;
-import com.intellij.execution.process.ProcessHandler;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.project.Project;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import com.intellij.execution.KillableProcess;
+import com.intellij.execution.process.ProcessHandler;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.project.Project;
 
 /**
  * The action to stop the running multirun configurations.
@@ -109,9 +109,8 @@ public class StopRunningMultirunConfigurationsAction extends AnAction {
     // TODO - move to some component
 
     public void beginStartingConfigurations() {
-        if (startingCounter.incrementAndGet() == 1) {
-            stopStartingConfigurations.set(false);
-        }
+        stopStartingConfigurations.set(false);
+        startingCounter.incrementAndGet();
     }
 
     public void doneStaringConfigurations() {

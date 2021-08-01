@@ -36,7 +36,7 @@
             </constraints>
             <properties>
               <text value="Start configurations one by one"/>
-              <toolTipText value="Start next configuration only after the previous configuration has been started. This may increase the start period, as &quot;before launch&quot; operations run one-by-one, not in parallel."/>
+              <toolTipText value="Start next configuration only after the previous configuration has been started. This may increase the start period, as &quot;before launch&quot; operations run one-by-one, not in parallel. Use negative delay to start next configuration only after previous has completed."/>
               <verticalAlignment value="0"/>
               <verticalTextPosition value="0"/>
             </properties>
@@ -105,6 +105,7 @@
             </constraints>
             <properties>
               <text value="with delay"/>
+              <toolTipText value="use negative delay to start next configuration only after previous has completed"/>
             </properties>
           </component>
           <component id="da67e" class="javax.swing.JTextField" binding="delayTime">
@@ -117,6 +118,7 @@
             </constraints>
             <properties>
               <text value="0"/>
+              <toolTipText value="use negative delay to start next configuration only after previous has completed"/>
             </properties>
           </component>
           <component id="63973" class="javax.swing.JLabel">

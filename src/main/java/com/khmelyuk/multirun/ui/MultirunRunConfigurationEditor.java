@@ -6,7 +6,6 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.openapi.util.SystemInfo;
 import com.intellij.ui.*;
 import com.intellij.ui.components.JBList;
 import com.khmelyuk.multirun.MultirunRunConfiguration;
@@ -47,10 +46,15 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
 
     @Override
     protected void resetEditorFrom(MultirunRunConfiguration multirunRunConfiguration) {
-        this.configuration = multirunRunConfiguration;
-        DefaultListModel listModel = new DefaultListModel();
-        for (RunConfiguration each : multirunRunConfiguration.getRunConfigurations()) {
-            listModel.addElement(each);
+        if (multirunRunConfiguration != null) {
+            this.configuration = multirunRunConfiguration;
+        }
+
+        final DefaultListModel listModel = new DefaultListModel();
+        if (this.configuration != null) {
+            for (RunConfiguration each : this.configuration.getRunConfigurations()) {
+                listModel.addElement(each);
+            }
         }
         configurations.setModel(listModel);
         configurations.getModel().addListDataListener(new ListDataListener() {
@@ -68,22 +72,30 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
             public void contentsChanged(ListDataEvent e) {
                 RunConfiguration[] buffer = new RunConfiguration[configurations.getModel().getSize()];
                 ((DefaultListModel) configurations.getModel()).copyInto(buffer);
-                configuration.setRunConfigurations(Arrays.asList(buffer));
+                if (MultirunRunConfigurationEditor.this.configuration != null) {
+                    configuration.setRunConfigurations(Arrays.asList(buffer));
+                }
                 fireEditorStateChanged();
             }
         });
         configurations.setCellRenderer(new RunConfigurationListCellRenderer());
 
-        delayTime.setText(String.format("%.1f", multirunRunConfiguration.getDelayTime()));
-        reuseTabs.setSelected(multirunRunConfiguration.isReuseTabs());
-        reuseTabsWithFailure.setSelected(multirunRunConfiguration.isReuseTabsWithFailure());
-        startOneByOne.setSelected(multirunRunConfiguration.isStartOneByOne());
-        markFailedProcess.setSelected(multirunRunConfiguration.isMarkFailedProcess());
-        hideSuccessProcess.setSelected(multirunRunConfiguration.isHideSuccessProcess());
+        if (this.configuration != null) {
+            delayTime.setText(String.format("%.1f", this.configuration.getDelayTime()));
+            reuseTabs.setSelected(this.configuration.isReuseTabs());
+            reuseTabsWithFailure.setSelected(this.configuration.isReuseTabsWithFailure());
+            startOneByOne.setSelected(this.configuration.isStartOneByOne());
+            markFailedProcess.setSelected(this.configuration.isMarkFailedProcess());
+            hideSuccessProcess.setSelected(this.configuration.isHideSuccessProcess());
+        }
     }
 
     @Override
     protected void applyEditorTo(MultirunRunConfiguration multirunRunConfiguration) {
+        if (multirunRunConfiguration == null) {
+            return;
+        }
+
         multirunRunConfiguration.setReuseTabs(reuseTabs.isSelected());
         multirunRunConfiguration.setReuseTabsWithFailure(reuseTabsWithFailure.isSelected());
         multirunRunConfiguration.setStartOneByOne(startOneByOne.isSelected());
@@ -182,6 +194,10 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
 
     private java.util.List<RunConfiguration> getConfigurationsToAdd() {
         java.util.List<RunConfiguration> result = new ArrayList<RunConfiguration>();
+        if (this.configuration == null) {
+            return result;
+        }
+
         java.util.List<RunConfiguration> allConfigurations = RunManager.getInstance(project).getAllConfigurationsList();
         for (RunConfiguration configuration : allConfigurations) {
             if (this.configuration.equals(configuration)) {

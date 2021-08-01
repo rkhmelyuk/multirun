@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultirunRunConfiguration extends RunConfigurationBase {
+public class MultirunRunConfiguration extends RunConfigurationBase implements RunnerSettings {
 
     public static final String PROP_SEPARATE_TABS = "separateTabs";
     public static final String PROP_REUSE_TABS_WITH_FAILURE = "reuseTabsWithFailures";
