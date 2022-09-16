@@ -1,11 +1,5 @@
 package com.khmelyuk.multirun;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.ExecutionTarget;
@@ -29,6 +23,7 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.impl.ActionManagerImpl;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
@@ -37,6 +32,11 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.LayeredIcon;
 import com.intellij.ui.content.Content;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Ruslan Khmelyuk
@@ -269,11 +269,14 @@ public class MultirunRunnerState implements RunProfileState {
                         }
                     }
             );
-
-            runner.execute(executionEnvironment);
+            ApplicationManager.getApplication().invokeLater(() -> {
+                try {
+                    runner.execute(executionEnvironment);
+                } catch (ExecutionException e) {
+                    ExecutionUtil.handleExecutionError(project, executor.getToolWindowId(), configuration.getConfiguration(), e);
+                }
+            }, ModalityState.defaultModalityState());
             started = true;
-        } catch (ExecutionException e) {
-            ExecutionUtil.handleExecutionError(project, executor.getToolWindowId(), configuration.getConfiguration(), e);
         } finally {
             // start the next one
             if (!startOneByOne) {
