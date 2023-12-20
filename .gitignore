@@ -9,3 +9,4 @@ build
 out
 !gradle/wrapper/gradle-wrapper.jar
 .idea/
+.DS_Store

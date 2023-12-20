@@ -1,7 +1,7 @@
 <idea-plugin url="https://plugins.jetbrains.com/plugin/7248-multirun">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>1.13</version>
+    <version>1.13.1</version>
     <vendor url="https://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
     <description>
