@@ -1,8 +1,8 @@
 <idea-plugin url="https://plugins.jetbrains.com/plugin/7248-multirun">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>1.13</version>
-    <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
+    <version>1.13.1</version>
+    <vendor url="https://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
 
     <description>
         <![CDATA[
@@ -25,13 +25,17 @@
             <li>Ready to use</li>
         </ol>
 
-        <p>Multirun + Before Launch Tasks gives even more functionality: read more at <a href="http://goo.gl/KwHvx">http://goo.gl/KwHvx</a></p>
+        <p>Multirun + Before Launch Tasks gives even more functionality: read more at <a href="https://goo.gl/KwHvx">https://goo.gl/KwHvx</a></p>
 
         ]]>
     </description>
 
     <change-notes>
         <![CDATA[
+        <p><strong>1.13.1</strong>:</p>
+        <ul>
+            <li>Fix EDT thread exceptions.</li>
+        </ul>
         <p><strong>1.13</strong>:</p>
         <ul>
             <li>Add support for 2021.2 version of IntelliJ based IDEs.</li>
