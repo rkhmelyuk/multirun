@@ -2,20 +2,22 @@ package com.khmelyuk.multirun.ui;
 
 import com.intellij.execution.RunManager;
 import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.ui.popup.PopupChooserBuilder;
 import com.intellij.ui.*;
 import com.intellij.ui.components.JBList;
 import com.khmelyuk.multirun.MultirunRunConfiguration;
 import com.khmelyuk.multirun.RunConfigurationHelper;
+
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -29,7 +31,7 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
 
     private Project project;
     private JPanel myMainPanel;
-    private JBList configurations;
+    private JBList<RunConfiguration> configurations;
     private JPanel collectionsPanel;
     private JCheckBox reuseTabs;
     private JCheckBox reuseTabsWithFailure;
@@ -45,12 +47,12 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
     }
 
     @Override
-    protected void resetEditorFrom(MultirunRunConfiguration multirunRunConfiguration) {
+    protected void resetEditorFrom(@Nullable MultirunRunConfiguration multirunRunConfiguration) {
         if (multirunRunConfiguration != null) {
             this.configuration = multirunRunConfiguration;
         }
 
-        final DefaultListModel listModel = new DefaultListModel();
+        final DefaultListModel<RunConfiguration> listModel = new DefaultListModel<>();
         if (this.configuration != null) {
             for (RunConfiguration each : this.configuration.getRunConfigurations()) {
                 listModel.addElement(each);
@@ -71,7 +73,7 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
             @Override
             public void contentsChanged(ListDataEvent e) {
                 RunConfiguration[] buffer = new RunConfiguration[configurations.getModel().getSize()];
-                ((DefaultListModel) configurations.getModel()).copyInto(buffer);
+                ((DefaultListModel<RunConfiguration>) configurations.getModel()).copyInto(buffer);
                 if (MultirunRunConfigurationEditor.this.configuration != null) {
                     configuration.setRunConfigurations(Arrays.asList(buffer));
                 }
@@ -87,11 +89,12 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
             startOneByOne.setSelected(this.configuration.isStartOneByOne());
             markFailedProcess.setSelected(this.configuration.isMarkFailedProcess());
             hideSuccessProcess.setSelected(this.configuration.isHideSuccessProcess());
+            delayTime.setEnabled(startOneByOne.isSelected());
         }
     }
 
     @Override
-    protected void applyEditorTo(MultirunRunConfiguration multirunRunConfiguration) {
+    protected void applyEditorTo(@Nullable MultirunRunConfiguration multirunRunConfiguration) {
         if (multirunRunConfiguration == null) {
             return;
         }
@@ -106,59 +109,52 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
             try {
                 delayTimeSeconds = Double.parseDouble(delayTime.getText());
             } catch (Exception e) {
-                e.printStackTrace();
+                // well ignore if the value is not a number
             }
         }
         multirunRunConfiguration.setDelayTime(delayTimeSeconds);
 
         RunConfiguration[] buffer = new RunConfiguration[configurations.getModel().getSize()];
-        ((DefaultListModel) configurations.getModel()).copyInto(buffer);
+        ((DefaultListModel<RunConfiguration>) configurations.getModel()).copyInto(buffer);
         MultirunRunConfigurationEditor.this.configuration.setRunConfigurations(Arrays.asList(buffer));
     }
 
     @NotNull
     @Override
     protected JComponent createEditor() {
-        configurations = new JBList();
+        configurations = new JBList<>();
         configurations.getEmptyText().setText("Add run configurations to this list");
         final ToolbarDecorator myDecorator = ToolbarDecorator.createDecorator(configurations);
         myDecorator.initPosition();
 
-        myDecorator.setRemoveAction(new AnActionButtonRunnable() {
-            @Override
-            public void run(AnActionButton anActionButton) {
-                ListUtil.removeSelectedItems(configurations);
-                markConfigurationsChanged();
-            }
+        myDecorator.setRemoveAction(anActionButton -> {
+            ListUtil.removeSelectedItems(configurations);
+            markConfigurationsChanged();
         });
-        myDecorator.setAddAction(new AnActionButtonRunnable() {
-            @Override
-            public void run(AnActionButton button) {
-                final JBList list = new JBList(getConfigurationsToAdd());
-                list.setCellRenderer(new RunConfigurationListCellRenderer());
-                JBPopupFactory.getInstance().createListPopupBuilder(list)
-                              .setItemChoosenCallback(new Runnable() {
-                                  @Override
-                                  public void run() {
-                                      int[] selectedIndices = list.getSelectedIndices();
-                                      for (int index : selectedIndices) {
-                                          RunConfiguration selectedRunConfiguration = (RunConfiguration) list.getModel().getElementAt(index);
-                                          if (selectedRunConfiguration != null) {
-                                              ((DefaultListModel) configurations.getModel()).addElement(selectedRunConfiguration);
-                                          }
+        myDecorator.setAddAction(button -> {
+            final JBList<RunConfiguration> list = new JBList<>(getConfigurationsToAdd());
+            list.setCellRenderer(new RunConfigurationListCellRenderer());
+            new PopupChooserBuilder<>(list)
+                    .setItemChosenCallback(() -> {
+                        int[] selectedIndices = list.getSelectedIndices();
+                        for (int index : selectedIndices) {
+                            RunConfiguration selectedRunConfiguration = list.getModel().getElementAt(index);
+                            if (selectedRunConfiguration != null) {
+                                ((DefaultListModel<RunConfiguration>) configurations.getModel()).addElement(selectedRunConfiguration);
+                            }
 
-                                          markConfigurationsChanged();
-                                      }
-                                  }
-                              })
-                              .createPopup()
-                              .showUnderneathOf(button.getContextComponent());
-            }
+                            markConfigurationsChanged();
+                        }
+                    })
+                    .createPopup()
+                    .showUnderneathOf(button.getContextComponent());
         });
-        myDecorator.setAddActionUpdater(new AnActionButtonUpdater() {
+        myDecorator.setAddActionUpdater(e -> !getConfigurationsToAdd().isEmpty());
+
+        startOneByOne.addActionListener(new AbstractAction() {
             @Override
-            public boolean isEnabled(AnActionEvent e) {
-                return !getConfigurationsToAdd().isEmpty();
+            public void actionPerformed(ActionEvent e) {
+                delayTime.setEnabled(startOneByOne.isSelected());
             }
         });
 
@@ -193,7 +189,7 @@ public class MultirunRunConfigurationEditor extends SettingsEditor<MultirunRunCo
     }
 
     private java.util.List<RunConfiguration> getConfigurationsToAdd() {
-        java.util.List<RunConfiguration> result = new ArrayList<RunConfiguration>();
+        java.util.List<RunConfiguration> result = new ArrayList<>();
         if (this.configuration == null) {
             return result;
         }

@@ -1,8 +1,8 @@
 <idea-plugin url="https://plugins.jetbrains.com/plugin/7248-multirun">
     <id>com.khmelyuk.multirun</id>
     <name>Multirun</name>
-    <version>1.13</version>
-    <vendor url="http://www.khmelyuk.com">Ruslan Khmelyuk</vendor>
+    <version>1.14</version>
+    <vendor url="http://www.khmelyuk.com">Ruslan Khmeliuk</vendor>
 
     <description>
         <![CDATA[
@@ -25,13 +25,19 @@
             <li>Ready to use</li>
         </ol>
 
-        <p>Multirun + Before Launch Tasks gives even more functionality: read more at <a href="http://goo.gl/KwHvx">http://goo.gl/KwHvx</a></p>
+        <p>Multirun + Before Launch Tasks gives even more functionality: read more at <a href="https://goo.gl/KwHvx">https://goo.gl/KwHvx</a></p>
 
         ]]>
     </description>
 
     <change-notes>
         <![CDATA[
+        <p><strong>1.14</strong>:</p>
+        <ul>
+            <li>Add support for 2023.3 version of IntelliJ based IDEs.</li>
+            <li>Fix "must be called on EDT exception"</li>
+            <li>Disable delay input if "Start configuration one by one" is disabled</li>
+        </ul>
         <p><strong>1.13</strong>:</p>
         <ul>
             <li>Add support for 2021.2 version of IntelliJ based IDEs.</li>
@@ -170,7 +176,7 @@
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="212.0000"/>
+    <idea-version since-build="233.0000"/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->

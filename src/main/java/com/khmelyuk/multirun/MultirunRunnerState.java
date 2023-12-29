@@ -123,7 +123,7 @@ public class MultirunRunnerState implements RunProfileState {
                                 processHandler.addProcessListener(new ProcessAdapter() {
                                     @SuppressWarnings("ConstantConditions")
                                     @Override
-                                    public void startNotified(ProcessEvent processEvent) {
+                                    public void startNotified(@NotNull final ProcessEvent processEvent) {
                                         Content content = descriptor.getAttachedContent();
                                         if (content != null) {
                                             content.setIcon(descriptor.getIcon());
@@ -152,55 +152,52 @@ public class MultirunRunnerState implements RunProfileState {
                                     }
 
                                     @Override
-                                    public void processTerminated(final ProcessEvent processEvent) {
-                                        onTermination(processEvent, true);
+                                    public void processTerminated(@NotNull final ProcessEvent processEvent) {
+                                        onTermination(processEvent);
                                         processTerminated.set(true);
                                         stopRunningMultirunConfiguration.removeProcess(project, processEvent.getProcessHandler());
                                     }
 
                                     @Override
-                                    public void processWillTerminate(ProcessEvent processEvent, boolean willBeDestroyed) {}
+                                    public void processWillTerminate(@NotNull ProcessEvent processEvent, boolean willBeDestroyed) {}
 
-                                    private void onTermination(final ProcessEvent processEvent, final boolean terminated) {
+                                    private void onTermination(final ProcessEvent processEvent) {
                                         if (descriptor.getAttachedContent() == null) {
                                             return;
                                         }
 
-                                        ApplicationManager.getApplication().executeOnPooledThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                final Content content = descriptor.getAttachedContent();
-                                                if (content == null) {return;}
+                                        ApplicationManager.getApplication().executeOnPooledThread(() -> {
+                                            final Content content = descriptor.getAttachedContent();
+                                            if (content == null) {return;}
 
-                                                // exit code is 0 if the process completed successfully
-                                                final boolean completedSuccessfully = (terminated && processEvent.getExitCode() == 0);
+                                            // exit code is 0 if the process completed successfully
+                                            final boolean completedSuccessfully = (processEvent.getExitCode() == 0);
 
-                                                if (hideSuccessProcess && completedSuccessfully) {
-                                                    // close the tab for the success process and exit - nothing else could be done
-                                                    ApplicationManager.getApplication().invokeLater(() -> {
-                                                        if (content.getManager() != null) {
-                                                            content.getManager().removeContent(content, false);
-                                                        }
-                                                    });
-                                                    return;
-                                                }
-
-                                                if ((completedSuccessfully && !reuseTabs) || (!completedSuccessfully && !reuseTabsWithFailure)) {
-                                                    // attempt to pin tab if not completed successfully or asked not to reuse tabs
-                                                    if (!stopRunningMultirunConfiguration.isStopMultirunTriggered()) {
-                                                        // ... do not pin if multirun stopped by "Stop Multirun" action.
-                                                        content.setPinned(true);
+                                            if (hideSuccessProcess && completedSuccessfully) {
+                                                // close the tab for the success process and exit - nothing else could be done
+                                                ApplicationManager.getApplication().invokeLater(() -> {
+                                                    if (content.getManager() != null) {
+                                                        content.getManager().removeContent(content, false);
                                                     }
-                                                }
+                                                });
+                                                return;
+                                            }
 
-                                                // remove the * used to identify running process
-                                                content.setDisplayName(descriptor.getDisplayName());
-
-                                                // add the alert icon in case if process existed with non-0 status
-                                                if (markFailedProcess && processEvent.getExitCode() != 0) {
-                                                    ApplicationManager.getApplication().executeOnPooledThread(
-                                                            () -> content.setIcon(LayeredIcon.create(content.getIcon(), AllIcons.Nodes.TabAlert)));
+                                            if ((completedSuccessfully && !reuseTabs) || (!completedSuccessfully && !reuseTabsWithFailure)) {
+                                                // attempt to pin tab if not completed successfully or asked not to reuse tabs
+                                                if (!stopRunningMultirunConfiguration.isStopMultirunTriggered()) {
+                                                    // ... do not pin if multirun stopped by "Stop Multirun" action.
+                                                    content.setPinned(true);
                                                 }
+                                            }
+
+                                            // remove the * used to identify running process
+                                            content.setDisplayName(descriptor.getDisplayName());
+
+                                            // add the alert icon in case if process existed with non-0 status
+                                            if (markFailedProcess && processEvent.getExitCode() != 0) {
+                                                ApplicationManager.getApplication().executeOnPooledThread(
+                                                        () -> content.setIcon(LayeredIcon.create(content.getIcon(), AllIcons.Nodes.TabAlert)));
                                             }
                                         });
                                     }
@@ -270,10 +267,15 @@ public class MultirunRunnerState implements RunProfileState {
                     }
             );
 
-            runner.execute(executionEnvironment);
+            ApplicationManager.getApplication().invokeLater(
+                    () -> {
+                        try {
+                            runner.execute(executionEnvironment);
+                        } catch (ExecutionException e) {
+                            ExecutionUtil.handleExecutionError(project, executor.getToolWindowId(), configuration.getConfiguration(), e);
+                        }
+                    });
             started = true;
-        } catch (ExecutionException e) {
-            ExecutionUtil.handleExecutionError(project, executor.getToolWindowId(), configuration.getConfiguration(), e);
         } finally {
             // start the next one
             if (!startOneByOne) {

@@ -32,14 +32,14 @@ public class MultirunRunConfiguration extends RunConfigurationBase implements Ru
     private boolean startOneByOne = true;
     private boolean markFailedProcess = true;
     private boolean hideSuccessProcess = false;
-    private List<RunConfigurationInternal> runConfigurations = new ArrayList<RunConfigurationInternal>();
+    private List<RunConfigurationInternal> runConfigurations = new ArrayList<>();
 
     public MultirunRunConfiguration(Project project, ConfigurationFactory factory, String name) {
         super(project, factory, name);
     }
 
     public List<RunConfiguration> getRunConfigurations() {
-        final List<RunConfiguration> result = new ArrayList<RunConfiguration>();
+        final List<RunConfiguration> result = new ArrayList<>();
         final List<RunConfiguration> allConfigurations = RunManager.getInstance(getProject()).getAllConfigurationsList();
         for (RunConfigurationInternal runConfiguration : runConfigurations) {
             for (RunConfiguration configuration : allConfigurations) {
@@ -64,7 +64,7 @@ public class MultirunRunConfiguration extends RunConfigurationBase implements Ru
     }
 
     public void setRunConfigurations(List<RunConfiguration> runConfigurations) {
-        this.runConfigurations = new ArrayList<RunConfigurationInternal>();
+        this.runConfigurations = new ArrayList<>();
         if (runConfigurations == null) {
             return;
         }
@@ -128,7 +128,7 @@ public class MultirunRunConfiguration extends RunConfigurationBase implements Ru
     }
 
     @Override
-    public void readExternal(Element element) throws InvalidDataException {
+    public void readExternal(@NotNull Element element) throws InvalidDataException {
         super.readExternal(element);
 
         if (element.getAttributeValue(PROP_SEPARATE_TABS) != null) {
@@ -164,7 +164,7 @@ public class MultirunRunConfiguration extends RunConfigurationBase implements Ru
     }
 
     @Override
-    public void writeExternal(Element element) throws WriteExternalException {
+    public void writeExternal(@NotNull Element element) throws WriteExternalException {
         super.writeExternal(element);
 
         element.setAttribute(PROP_SEPARATE_TABS, String.valueOf(!reuseTabs));

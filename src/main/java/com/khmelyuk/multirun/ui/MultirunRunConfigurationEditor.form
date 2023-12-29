@@ -117,6 +117,7 @@
               </grid>
             </constraints>
             <properties>
+              <editable value="true"/>
               <text value="0"/>
               <toolTipText value="use negative delay to start next configuration only after previous has completed"/>
             </properties>

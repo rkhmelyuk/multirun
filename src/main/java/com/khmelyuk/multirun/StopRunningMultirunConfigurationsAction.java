@@ -7,8 +7,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.execution.KillableProcess;
 import com.intellij.execution.process.ProcessHandler;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
@@ -24,6 +27,11 @@ public class StopRunningMultirunConfigurationsAction extends AnAction {
     private final ConcurrentHashMap<Project, List<ProcessHandler>> processes = new ConcurrentHashMap<>();
     private final AtomicBoolean stopStartingConfigurations = new AtomicBoolean(false);
     private final AtomicInteger startingCounter = new AtomicInteger(0);
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
+    }
 
     @Override public void update(AnActionEvent e) {
         super.update(e);
