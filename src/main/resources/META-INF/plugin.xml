@@ -35,6 +35,7 @@
         <p><strong>1.14.1</strong>:</p>
         <ul>
             <li>Parsing the delay with respect to current locale.</li>
+            <li>Add profiler run configurations support.</li>
         </ul>
         <p><strong>1.14</strong>:</p>
         <ul>

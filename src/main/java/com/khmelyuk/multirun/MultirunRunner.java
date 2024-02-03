@@ -17,6 +17,7 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
+import com.intellij.profiler.DefaultProfilerExecutorGroup;
 import com.khmelyuk.multirun.ui.MultirunRunConfigurationEditor;
 
 /**
@@ -60,6 +61,7 @@ public class MultirunRunner implements ProgramRunner<MultirunRunConfiguration> {
         return runProfile instanceof MultirunRunConfiguration &&
                 (DefaultRunExecutor.EXECUTOR_ID.equalsIgnoreCase(executorId)
                         || DefaultDebugExecutor.EXECUTOR_ID.equalsIgnoreCase(executorId)
+                        || DefaultProfilerExecutorGroup.EXECUTOR_ID.equalsIgnoreCase(executorId)
                         || CoverageExecutor.EXECUTOR_ID.equalsIgnoreCase(executorId)
                         || JREBEL_EXECUTOR_ID.equalsIgnoreCase(executorId)
                         || JREBEL_DEBUG_ID.equalsIgnoreCase(executorId));
