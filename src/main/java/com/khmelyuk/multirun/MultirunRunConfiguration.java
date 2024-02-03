@@ -14,8 +14,11 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MultirunRunConfiguration extends RunConfigurationBase implements RunnerSettings {
 
@@ -147,7 +150,12 @@ public class MultirunRunConfiguration extends RunConfigurationBase implements Ru
             hideSuccessProcess = Boolean.parseBoolean(element.getAttributeValue(PROP_HIDE_SUCCESS_PROCESS));
         }
         if (element.getAttributeValue(PROP_DELAY_TIME) != null) {
-            delayTime = Double.parseDouble(element.getAttributeValue(PROP_DELAY_TIME));
+            try {
+                final NumberFormat numberFormat = NumberFormat.getInstance(Locale.getDefault());
+                delayTime = numberFormat.parse(element.getAttributeValue(PROP_DELAY_TIME)).doubleValue();
+            } catch (ParseException e) {
+                throw new NumberFormatException(e.getMessage());
+            }
         }
 
         for (Object each : element.getContent()) {

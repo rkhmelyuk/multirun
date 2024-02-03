@@ -32,6 +32,10 @@
 
     <change-notes>
         <![CDATA[
+        <p><strong>1.14.1</strong>:</p>
+        <ul>
+            <li>Parsing the delay with respect to current locale.</li>
+        </ul>
         <p><strong>1.14</strong>:</p>
         <ul>
             <li>Add support for 2023.3 version of IntelliJ based IDEs.</li>
@@ -193,7 +197,7 @@
     <actions>
         <!-- Add your actions here -->
         <action id="stopRunningMultirunConfiguration" class="com.khmelyuk.multirun.StopRunningMultirunConfigurationsAction"
-                text="Stop Multirun" description="Stop Running Multirun Configurations" icon="/actions/suspend.png">
+                text="Stop Multirun" description="Stop running Multirun configurations" icon="/actions/suspend.png">
             <add-to-group group-id="RunMenu" relative-to-action="Stop" anchor="after"/>
             <keyboard-shortcut keymap="$default" first-keystroke="shift alt K"/>
             <keyboard-shortcut keymap="Mac OS X" first-keystroke="control alt K"/>
